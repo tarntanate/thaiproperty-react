@@ -10,6 +10,14 @@ Note2: Performance may be drop on slow machine with a lot of markers (eg. more t
 
 ---
 
+### What you should look into this repo?
+
+* 'React App' in '/ClientApp/src/' folder
+* 'Testing for React App' in '/ClientApp/src/tests/' folder
+* 'Backend Api Controller as C#.NET' in '/Controllers/' folder
+
+---
+
 ### API Url configuration location
 
 http://localhost:5000/api/***
