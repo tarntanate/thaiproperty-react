@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +26,12 @@ namespace Thaiproperty
       services.AddDbContext<ThaipropertyDbContext>(options =>
           options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
       services.AddCors();
+      services.AddResponseCompression(options =>
+        {
+          options.Providers.Add<GzipCompressionProvider>();
+        });
+
+      services.AddResponseCaching();
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
       services.AddNodeServices();

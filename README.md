@@ -10,6 +10,10 @@ Note2: Performance may be drop on slow machine with a lot of markers (eg. more t
 
 ---
 
+### See a real demo app at http://api.thaiproperty.in.th/projectlist
+
+---
+
 ### What you should look into this repo?
 
 * 'React App' in '/ClientApp/src/' folder
@@ -48,3 +52,11 @@ OR run server and client seperately by
 ### For client-side (React) testing
 
 Go into 'ClientApp' folder and run '**npm test**'.
+
+---
+
+## How to deploy to production server.
+
+To deploy with windows IIS
+
+* Run "dotnet publish --configuration Release --runtime win10-x64 --verbosity normal"

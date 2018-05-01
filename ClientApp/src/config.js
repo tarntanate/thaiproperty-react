@@ -1,7 +1,8 @@
 // Application wide configuration
 
 // default API endpoint url
-export const API_BASE_URL = 'http://localhost:5000/api';
+// export const API_BASE_URL = 'http://localhost:5000/api';
+export const API_BASE_URL = 'http://api.thaiproperty.in.th/api';
 
 // Google Map
 export const GOOGLE_MAP_API_KEY = 'AIzaSyDCQ3Jlt7fPokdW1bs2jRcwf46l7kYJx5k';
