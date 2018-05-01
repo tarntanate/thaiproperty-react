@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProjectList Reducer Data should match with snapshot: ProjectData 1`] = `
+Object {
+  "avgPricePerArea": 44911.42215854823,
+  "companyId": 31,
+  "location": Object {
+    "lat": 13.767426,
+    "lng": 100.616149,
+  },
+  "projectId": 104,
+  "projectName": "ลุมพินี คอนโดทาวน์ บดินทรเดชา-รามคำแหง 43/1",
+  "projectNameEn": "Lumpini Condotown Ram 43/1",
+  "projectTypeId": 4,
+  "thumbnailUrl": "http://www.thaiproperty.in.th/images/project/104.jpg",
+  "totalPost": 1238,
+}
+`;
