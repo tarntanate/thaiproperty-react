@@ -25,6 +25,7 @@ Note2: Performance may be drop on slow machine with a lot of markers (eg. more t
 ### API Url configuration location
 
 In development: http://localhost:5000/api/
+
 In production: http://api.thaiproperty.in.th/api
 
 or via https with port 5001
