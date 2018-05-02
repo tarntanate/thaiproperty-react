@@ -1,4 +1,4 @@
-﻿import { API_BASE_URL } from '../config.js';
+﻿import { API_BASE_URL_DEV, API_BASE_URL_PROD } from '../config.js';
 
 export const requestProjectList = 'REQUEST_PROJECT_LIST_FROM_API';
 export const receivedProjectList = 'RECEIVE_PROJECT_LIST_FROM_API';
@@ -12,12 +12,17 @@ export const actionCreators = {
     }
     dispatch({ type: requestProjectList });
 
-    let url = `${API_BASE_URL}/Project/GetAllProjectsWithAvgPrice`;
-    if (limitResult) {
-      url = url + `?limitResult=${limitResult}`;
+    var apiServer = API_BASE_URL_PROD;
+    if (process.env && process.env.NODE_ENV === 'development') {
+      apiServer = API_BASE_URL_DEV;
     }
-    console.debug('Requesting API:', url);
-    const response = await fetch(url);
+
+    let apiUrl = `${apiServer}/Project/GetAllProjectsWithAvgPrice`;
+    if (limitResult) {
+      apiUrl = apiUrl + `?limitResult=${limitResult}`;
+    }
+    console.debug('Requesting API:', apiUrl);
+    const response = await fetch(apiUrl);
     const data = await response.json();
 
     // after getting data from await, then dispatch a new action with data received from API
