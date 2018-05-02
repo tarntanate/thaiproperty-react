@@ -18,7 +18,7 @@ Models/*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-*.package-lock.json
+package-lock.json
 ClientApp/package-lock.json
 
 # Build results
