@@ -22,31 +22,36 @@ class ProjectList extends Component {
     maxAvgPrice: MAX_PROJECT_AVG_PRICE_PER_SQM,
     searchText: '',
     isLoading: false, // this is local loading from search filter or sliding price limit
+    showInitialMessage: true, // this allow to show notification only one time
   };
 
   componentWillMount() {
-    const limitProjectsFromAPI = 150; // too much results will increase in API loading time and more memory usage
-    this.props.requestProjectList(limitProjectsFromAPI); // call redux action 'requestProjectList'
+    const limitRecordsFromAPI = 150; // too much results will increase in API loading time and more memory usage
+    this.props.requestProjectList(limitRecordsFromAPI); // call redux action 'requestProjectList'
   }
 
   componentWillReceiveProps({ projectList }) {
     // Triggers when recieving project list on redux store as a props
     // Destructing projectList from nextProps
     if (projectList) {
-      this.setProjectListToStateWithLimitResult(projectList, LIMIT_PROJECTS_SHOW_ON_MAP);
+      this.setProjectListToStateWithLimitResult(projectList);
+    }
+    if (this.state.projectList.length > 0 && projectList) {
+      this.showNumberOfProjectsOnNotification(projectList.length);
     }
   }
 
-  setProjectListToStateWithLimitResult(projectList, limit) {
+  setProjectListToStateWithLimitResult(projectList) {
     this.setState({ projectList: projectList.slice(0, LIMIT_PROJECTS_SHOW_ON_MAP) });
+  }
 
-    const actualLength = projectList.length;
-    if (actualLength > LIMIT_PROJECTS_SHOW_ON_MAP) {
+  showNumberOfProjectsOnNotification(actualLength) {
+    if (this.state.showInitialMessage && actualLength > LIMIT_PROJECTS_SHOW_ON_MAP) {
       this.showDelayedMessage(
         `จำกัดการแสดงผลโครงการคอนโดบนแผนที่สูงสุดไม่เกิน ${LIMIT_PROJECTS_SHOW_ON_MAP} โครงการ (จากทั้งหมด ${actualLength} โครงการ)`,
       );
     } else {
-      this.showDelayedMessage(`แสดงรายการโครงการคอนโดทั้งหมด ${projectList.length} โครงการ`);
+      this.showDelayedMessage(`แสดงรายการโครงการคอนโดทั้งหมด ${actualLength} โครงการ`);
     }
   }
 
