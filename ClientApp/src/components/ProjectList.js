@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Input, Spin, Slider } from 'antd';
+import { Input, Spin, Slider, notification } from 'antd';
 import _ from 'lodash';
 
 // import user libriers
@@ -30,9 +30,19 @@ class ProjectList extends Component {
     this.props.requestProjectList(limitRecordsFromAPI); // call redux action 'requestProjectList'
   }
 
-  componentWillReceiveProps({ projectList }) {
+  componentWillReceiveProps({ projectList, errorMessage }) {
     // Triggers when recieving project list on redux store as a props
     // Destructing projectList from nextProps
+    if (errorMessage) {
+      notification.config({
+        placement: 'bottomRight',
+      });
+      notification.error({
+        message: 'Error loading projects',
+        description: errorMessage,
+        duration: 15,
+      });
+    }
     if (projectList) {
       this.setProjectListToStateWithLimitResult(projectList);
     }

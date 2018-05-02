@@ -1,8 +1,9 @@
 ﻿import { API_BASE_URL_DEV, API_BASE_URL_PROD } from '../config.js';
 
 export const requestProjectList = 'REQUEST_PROJECT_LIST_FROM_API';
-export const receivedProjectList = 'RECEIVE_PROJECT_LIST_FROM_API';
-const initialState = { projects: [], isLoading: false };
+export const receivedProjectList = 'RECEIVED_PROJECT_LIST_FROM_API';
+export const errorReceivingProjectList = 'ERROR_RECEIVE_PROJECT_LIST_FROM_API';
+const initialState = { projects: [], isLoading: false, errorMessage: null };
 
 export const actionCreators = {
   requestProjectList: limitResult => async (dispatch, getState) => {
@@ -22,11 +23,23 @@ export const actionCreators = {
       apiUrl = apiUrl + `?limitResult=${limitResult}`;
     }
     console.debug('Requesting API:', apiUrl);
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-
-    // after getting data from await, then dispatch a new action with data received from API
-    dispatch({ type: receivedProjectList, data });
+    await fetch(apiUrl)
+      .then(
+        response => {
+          console.log('response=', response);
+          const data = response.json();
+          // after getting data from await, then dispatch a new action with data received from API
+          dispatch({ type: receivedProjectList, data });
+        },
+        errorFromResponse => {
+          console.error('Error fetching api:', errorFromResponse);
+          dispatch({ type: errorReceivingProjectList, errorMessage: errorFromResponse });
+        },
+      )
+      .catch(errorFromCatch => {
+        console.error('errorFromCatch=', errorFromCatch);
+        dispatch({ type: errorReceivingProjectList, errorMessage: errorFromCatch });
+      });
   },
 };
 
@@ -50,6 +63,14 @@ export const reducer = (state, action) => {
       // We filtered only the projects that have location from the API
       projectList: action.data,
       // projectList: action.data.filter(project => project.location.lat != null),
+      isLoading: false,
+    };
+  }
+
+  if (action.type === errorReceivingProjectList) {
+    return {
+      ...state,
+      errorMessage: 'Cannot fetch data from API',
       isLoading: false,
     };
   }

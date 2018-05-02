@@ -1,4 +1,5 @@
 // Application wide configuration
+export const SITE_NAME = 'ThaiProperty.in.th';
 
 // default API endpoint url
 export const API_BASE_URL_DEV = 'https://localhost:5001/api';
