@@ -1,6 +1,6 @@
 ## FOR TESTING AND DEMO OF REACT + .NET CORE ONLY!!
 
-### THIS REPOS DOES NOT ALLOW TO REPRODUCE AND PLEASE USE WITH CONFIDENTIALLY!!
+### THIS REPO DOES NOT ALLOW TO REPRODUCE AND PLEASE USE WITH CONFIDENTIALLY!!
 
 ### This application demonstrate of listing condominium projects on a Google Map (as Marker & MarkerClusterer). User allow to filter the price based on average price/sqm. via slider or filter by project name with a "**real-time**" re-rendering on a map.
 
