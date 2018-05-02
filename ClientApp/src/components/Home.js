@@ -1,16 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'antd';
+import { NavItem } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import SearchForm from './Shared/SearchForm';
 
 const Home = props => (
-  <Card title="Under development!" bordered={true} style={{ width: 360, marginTop: 20 }}>
-    <SearchForm
-      handleFormSubmit={() => {
-        alert('Not Implemented Yet!');
-      }}
-    />
-  </Card>
+  <div style={{ marginTop: 20 }}>
+    <LinkContainer to={'/projectlist'}>
+      <NavItem>Please see a demo on Condominium Project List on Map</NavItem>
+    </LinkContainer>
+    {false && (
+      <Card title="Under development!" bordered={true} style={{ width: 360, marginTop: 20 }}>
+        <SearchForm
+          handleFormSubmit={() => {
+            alert('Not Implemented Yet!');
+          }}
+        />
+      </Card>
+    )}
+  </div>
 );
 
 export default connect()(Home);

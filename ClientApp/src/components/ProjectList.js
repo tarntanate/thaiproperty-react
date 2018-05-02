@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Input, Spin, Slider, notification } from 'antd';
-import _ from 'lodash';
+import { Input, Spin, Slider, notification, Alert } from 'antd';
+// import _ from 'lodash';
 
 // import user libriers
 import { actionCreators } from '../reducers/ProjectList';
@@ -178,43 +178,51 @@ class ProjectList extends Component {
 
     return (
       <div style={{ margin: '5px' }}>
-        <div style={{ marginLeft: '15px', marginRight: '15px' }}>
-          <h3 className="h4">กรองการค้นหาจากชื่อโครงการ หรือช่วงราคาต่อตารางเมตร</h3>
-          <div>
-            <Input
-              type="text"
-              size="large"
-              placeholder="ใส่ชื่อโครงการที่ต้องการค้นหา"
-              value={this.state.searchText}
-              onChange={e => this.setState({ searchText: e.target.value })}
-              onPressEnter={e => this.onProjectNameSearch(e)}
+        {this.props.errorMessage && (
+          <div style={{ margin: 20 }}>
+            <Alert message="มีข้อผิดพลาด" description={this.props.errorMessage} type="error" showIcon />
+          </div>
+        )}
+        {!this.props.errorMessage && (
+          <div style={{ marginLeft: '15px', marginRight: '15px' }}>
+            <h3 className="h4">กรองการค้นหาจากชื่อโครงการ หรือช่วงราคาต่อตารางเมตร</h3>
+            <div>
+              <Input
+                type="text"
+                size="large"
+                placeholder="ใส่ชื่อโครงการที่ต้องการค้นหา"
+                value={this.state.searchText}
+                onChange={e => this.setState({ searchText: e.target.value })}
+                onPressEnter={e => this.onProjectNameSearch(e)}
+              />
+            </div>
+            <Slider
+              range
+              disabled={this.state.isLoading}
+              defaultValue={[0, MAX_PROJECT_AVG_PRICE_PER_SQM]}
+              step={SLIDER_AVG_PRICE_STEP}
+              max={MAX_PROJECT_AVG_PRICE_PER_SQM}
+              value={[this.state.minAvgPrice, this.state.maxAvgPrice]}
+              tipFormatter={this.sliderTooltipFormatter}
+              onChange={this.onPriceFilterChanged}
             />
+            <div>
+              {this.state.minAvgPrice !== null && (
+                <span>
+                  แสดงราคาต่อตารางเมตร ระหว่าง {this.state.minAvgPrice.toLocaleString()} ถึง{' '}
+                  {this.state.maxAvgPrice.toLocaleString()}
+                  &nbsp;มีทั้งหมด <strong style={{ color: 'darkgreen' }}>{this.state.projectList.length}</strong>{' '}
+                  โครงการ
+                </span>
+              )}
+              {this.state.isLoading && (
+                <span style={{ fontStyle: 'italic' }}>
+                  <Spin size="small" style={{ marginLeft: '10px', marginRight: '10px' }} />กำลังอัพเดตแผนที่...
+                </span>
+              )}
+            </div>
           </div>
-          <Slider
-            range
-            disabled={this.state.isLoading}
-            defaultValue={[0, MAX_PROJECT_AVG_PRICE_PER_SQM]}
-            step={SLIDER_AVG_PRICE_STEP}
-            max={MAX_PROJECT_AVG_PRICE_PER_SQM}
-            value={[this.state.minAvgPrice, this.state.maxAvgPrice]}
-            tipFormatter={this.sliderTooltipFormatter}
-            onChange={this.onPriceFilterChanged}
-          />
-          <div>
-            {this.state.minAvgPrice !== null && (
-              <span>
-                แสดงราคาต่อตารางเมตร ระหว่าง {this.state.minAvgPrice.toLocaleString()} ถึง{' '}
-                {this.state.maxAvgPrice.toLocaleString()}
-                &nbsp;มีทั้งหมด <strong style={{ color: 'darkgreen' }}>{this.state.projectList.length}</strong> โครงการ
-              </span>
-            )}
-            {this.state.isLoading && (
-              <span style={{ fontStyle: 'italic' }}>
-                <Spin size="small" style={{ marginLeft: '10px', marginRight: '10px' }} />กำลังอัพเดตแผนที่...
-              </span>
-            )}
-          </div>
-        </div>
+        )}
         <GoogleMapWithMarkerClusterer
           markers={this.state.projectList}
           currentLocation={this.state.currentLocation}
