@@ -65,6 +65,7 @@ namespace Thaiproperty.Controllers
     }
 
     [HttpGet("{limitResult?}")]
+    [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Any, NoStore = false)]
     public IActionResult GetAllProjectsWithAvgPrice(int limitResult = 200)
     {
       var result = dbContext.NewProject
