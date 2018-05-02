@@ -26,10 +26,11 @@ export const actionCreators = {
     await fetch(apiUrl)
       .then(
         response => {
-          console.log('response=', response);
-          const data = response.json();
-          // after getting data from await, then dispatch a new action with data received from API
-          dispatch({ type: receivedProjectList, data });
+          // console.log('response=', response);
+          response.json().then(data => {
+            // after getting data from await, then dispatch a new action with data received from API
+            dispatch({ type: receivedProjectList, data });
+          });
         },
         errorFromResponse => {
           console.error('Error fetching api:', errorFromResponse);
