@@ -8,7 +8,7 @@ import SearchForm from './Shared/SearchForm';
 const Home = props => (
   <div style={{ marginTop: 20 }}>
     <LinkContainer to={'/projectlist'}>
-      <NavItem>Please see a demo on Condominium Project List on Map</NavItem>
+      <NavItem>Click here to see a demo of Condominium Project List on Map</NavItem>
     </LinkContainer>
     {false && (
       <Card title="Under development!" bordered={true} style={{ width: 360, marginTop: 20 }}>

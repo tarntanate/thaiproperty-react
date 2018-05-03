@@ -8,6 +8,8 @@
 *.exclude.js
 *.exclude.cs
 *.excluded
+*.excluded.js
+*.excluded.cs
 *.suo
 *.user
 *.userosscache

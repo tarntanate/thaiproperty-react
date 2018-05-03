@@ -3,7 +3,7 @@
 export const requestProjectList = 'REQUEST_PROJECT_LIST_FROM_API';
 export const receivedProjectList = 'RECEIVED_PROJECT_LIST_FROM_API';
 export const errorReceivingProjectList = 'ERROR_RECEIVE_PROJECT_LIST_FROM_API';
-const initialState = { projects: [], isLoading: false, errorMessage: null };
+export const initialState = { projects: [], isLoading: false, errorMessage: null };
 
 export const actionCreators = {
   requestProjectList: limitResult => async (dispatch, getState) => {
@@ -14,7 +14,7 @@ export const actionCreators = {
     dispatch({ type: requestProjectList });
 
     var apiServer = API_BASE_URL_PROD;
-    if (process.env && process.env.NODE_ENV === 'development') {
+    if ((process.env && process.env.NODE_ENV === 'development') || process.env.NODE_ENV === 'test') {
       apiServer = API_BASE_URL_DEV;
     }
 

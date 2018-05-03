@@ -184,7 +184,7 @@ class ProjectList extends Component {
           </div>
         )}
         {!this.props.errorMessage && (
-          <div style={{ marginLeft: '15px', marginRight: '15px' }}>
+          <div style={{ marginLeft: '20px', marginRight: '20px' }}>
             <h3 className="h4">กรองการค้นหาจากชื่อโครงการ หรือช่วงราคาต่อตารางเมตร</h3>
             <div>
               <Input
