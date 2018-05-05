@@ -10,13 +10,13 @@ const mockStore = configureMockStore();
 const store = mockStore({});
 
 describe('SearchForm Components', () => {
-  it('Should renders correctly', () => {
-    const tree = renderer
+  it('Should renders match snapshot', () => {
+    const component = renderer
       .create(<Provider store = {store}>
                 <SearchForm />
               </Provider>)
       .toJSON();
-    console.log(tree);
-    expect(tree).toMatchSnapshot();
+    console.debug(component);
+    expect(component).toMatchSnapshot();
   });
 });
