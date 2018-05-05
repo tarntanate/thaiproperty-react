@@ -1,5 +1,5 @@
 import configureMockStore from 'redux-mock-store';
-
+import 'whatwg-fetch';
 import promiseMiddleware from 'redux-promise-middleware';
 // import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -21,7 +21,7 @@ beforeAll(() => {
 });
 
 describe('ProjectList Reducer', () => {
-  beforeEach(function() {
+  beforeEach(function () {
     // console.log('Before each');
     // const store = mockStore();
     // store.dispatch(actionCreators.requestProjectList(5));
@@ -39,12 +39,16 @@ describe('ProjectList Reducer', () => {
 
   it('Should get data from api without error', () => {
     const limitResult = 5;
-    const store = mockStore({ projects: [] });
+    const store = mockStore({
+      projects: []
+    });
+
     const action = store.dispatch(actionCreators.requestProjectList(limitResult)).then(result => {
       // return of async actions
       // console.log(result);
       var actualActions = store.getActions();
 
+      console.warn('result=', result);
       console.warn('getAction=', actualActions);
       expect(actualActions[0].type).toEqual(requestProjectList);
       // expect(result[1].type).toEqual(receivedProjectList);

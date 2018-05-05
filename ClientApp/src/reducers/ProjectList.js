@@ -1,17 +1,32 @@
-﻿import { API_BASE_URL_DEV, API_BASE_URL_PROD } from '../config.js';
+﻿import {
+  API_BASE_URL_DEV,
+  API_BASE_URL_PROD
+} from '../config.js';
 
+// action types
 export const requestProjectList = 'REQUEST_PROJECT_LIST_FROM_API';
 export const receivedProjectList = 'RECEIVED_PROJECT_LIST_FROM_API';
 export const errorReceivingProjectList = 'ERROR_RECEIVE_PROJECT_LIST_FROM_API';
-export const initialState = { projects: [], isLoading: false, errorMessage: null };
 
+// initial state
+export const initialState = {
+  projects: [],
+  isLoading: false,
+  errorMessage: null
+};
+
+// action creators
 export const actionCreators = {
+  // 'requestProjectList' is a thunk action creator is a function that returns a function
+  // it is the same as return (dispatch, getState) => {}
   requestProjectList: limitResult => async (dispatch, getState) => {
     if (limitResult === 0) {
       // useless to call API, so just don't dispatch action
       return;
     }
-    dispatch({ type: requestProjectList });
+    dispatch({
+      type: requestProjectList
+    });
 
     var apiServer = API_BASE_URL_PROD;
     if ((process.env && process.env.NODE_ENV === 'development') || process.env.NODE_ENV === 'test') {
@@ -23,23 +38,33 @@ export const actionCreators = {
       apiUrl = apiUrl + `?limitResult=${limitResult}`;
     }
     console.debug('Requesting API:', apiUrl);
-    await fetch(apiUrl)
+    const result = fetch(apiUrl);
+    return result
       .then(
         response => {
           // console.log('response=', response);
           response.json().then(data => {
             // after getting data from await, then dispatch a new action with data received from API
-            dispatch({ type: receivedProjectList, data });
+            dispatch({
+              type: receivedProjectList,
+              data
+            });
           });
         },
         errorFromResponse => {
           console.error('Error fetching api:', errorFromResponse);
-          dispatch({ type: errorReceivingProjectList, errorMessage: errorFromResponse });
+          dispatch({
+            type: errorReceivingProjectList,
+            errorMessage: errorFromResponse
+          });
         },
       )
       .catch(errorFromCatch => {
         console.error('errorFromCatch=', errorFromCatch);
-        dispatch({ type: errorReceivingProjectList, errorMessage: errorFromCatch });
+        dispatch({
+          type: errorReceivingProjectList,
+          errorMessage: errorFromCatch
+        });
       });
   },
 };

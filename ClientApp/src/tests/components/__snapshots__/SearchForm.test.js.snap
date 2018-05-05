@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchForm Components Should renders correctly 1`] = `
+<div
+  className="ant-card"
+>
+  <div
+    className="ant-card-body"
+    style={undefined}
+  >
+    <form
+      className="ant-form ant-form-inline"
+      onSubmit={[Function]}
+    >
+      <div
+        className="ant-row ant-form-item"
+        style={undefined}
+      >
+        <div
+          className="ant-col-24 ant-form-item-control-wrapper"
+        >
+          <div
+            className="ant-form-item-control"
+          >
+            <span
+              className="ant-form-item-children"
+            >
+              <input
+                className="ant-input ant-input-lg"
+                disabled={false}
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                placeholder="ใส่คำค้นหา..."
+                size="large"
+                type="text"
+                value=""
+              />
+              <button
+                className="ant-btn ant-btn-primary"
+                onClick={[Function]}
+                type="button"
+              >
+                <i
+                  className="anticon anticon-search"
+                />
+                <span>
+                  ค้นหา
+                </span>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+`;
