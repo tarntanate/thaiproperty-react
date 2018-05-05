@@ -1,6 +1,4 @@
 import configureMockStore from 'redux-mock-store';
-import 'whatwg-fetch';
-import promiseMiddleware from 'redux-promise-middleware';
 // import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import {
@@ -48,8 +46,7 @@ describe('ProjectList Reducer', () => {
       // console.log(result);
       var actualActions = store.getActions();
 
-      console.warn('result=', result);
-      console.warn('getAction=', actualActions);
+      console.info('getAction=', actualActions);
       expect(actualActions[0].type).toEqual(requestProjectList);
       // expect(result[1].type).toEqual(receivedProjectList);
       // expect(result[1].data.length).toEqual(limitResult);

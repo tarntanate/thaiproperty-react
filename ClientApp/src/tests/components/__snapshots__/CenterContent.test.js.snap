@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CenterContent Components Should renders match snapshot 1`] = `
+<div
+  className="panel panel-default"
+  onClick={undefined}
+  style={
+    Object {
+      "marginTop": "20px",
+    }
+  }
+>
+  <div
+    className="panel-body"
+    style={
+      Object {
+        "textAlign": "center",
+        "verticalAlign": "middle",
+        "width": "100%",
+      }
+    }
+  >
+    <h2>
+      Inside Content
+    </h2>
+  </div>
+</div>
+`;
