@@ -40,34 +40,35 @@ export const actionCreators = {
     console.debug('Requesting API:', apiUrl);
     const result = fetch(apiUrl);
     return result
-      .then(
-        response => {
-          // console.log('response=', response);
-          response.json().then(data => {
-            // after getting data from await, then dispatch a new action with data received from API
-            dispatch({
-              type: receivedProjectList,
-              data
-            });
-          });
-        },
-        errorFromResponse => {
-          console.error('Error fetching api:', errorFromResponse);
+      .then(handleErrors)
+      .then(response => {
+        // console.log('response=', response);
+        response.json().then(data => {
+          // after getting data from await, then dispatch a new action with data received from API
           dispatch({
-            type: errorReceivingProjectList,
-            errorMessage: errorFromResponse
+            type: receivedProjectList,
+            data
           });
-        },
-      )
-      .catch(errorFromCatch => {
-        console.error('errorFromCatch=', errorFromCatch);
+        });
+      })
+      .catch(err => {
         dispatch({
           type: errorReceivingProjectList,
-          errorMessage: errorFromCatch
+          errorMessage: `ไม่สามารถดึงข้อมูลได้ (${err.message})`,
         });
       });
   },
 };
+
+const handleErrors = (response) => {
+  // handle server response with non Ok status
+  console.log('response=',response);
+  if (!response.ok) {
+    // throw an exception which will go into the catch exception section
+    throw Error('Server Error: ' + response.status + ' - ' + response.statusText);
+  }
+  return response;
+}
 
 export const reducer = (state, action) => {
   state = state || initialState;
@@ -94,9 +95,10 @@ export const reducer = (state, action) => {
   }
 
   if (action.type === errorReceivingProjectList) {
+    console.log(action);
     return {
       ...state,
-      errorMessage: 'Cannot fetch data from API',
+      errorMessage: action.errorMessage,
       isLoading: false,
     };
   }

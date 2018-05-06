@@ -27,7 +27,7 @@ class ProjectList extends Component {
 
   componentWillMount() {
     const limitRecordsFromAPI = 250; // too much results will increase in API loading time and more memory usage
-    this.props.requestProjectList(limitRecordsFromAPI); // call redux action 'requestProjectList'
+    this.props.requestProjectList(limitRecordsFromAPI); // call redux action creator 'requestProjectList'
   }
 
   componentWillReceiveProps({ projectList, errorMessage }) {
