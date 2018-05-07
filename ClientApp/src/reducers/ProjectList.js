@@ -75,7 +75,6 @@ export const reducer = (state, action) => {
   if (!process.env) {
     console.debug('action.type:', action.type);
   }
-  // console.log('state: ', state);
 
   if (action.type === requestProjectList) {
     return {

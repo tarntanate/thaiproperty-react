@@ -17,6 +17,8 @@
 appsettings.*
 /test.js
 Models/*
+ClientApp/README.md
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
