@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Input from 'antd/lib/input/';
+import Input from 'antd/lib/input';
 import Slider from 'antd/lib/slider'
 
 // import user libriers

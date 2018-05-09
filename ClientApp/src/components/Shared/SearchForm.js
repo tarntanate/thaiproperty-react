@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card, Form, Button, Input, Icon } from 'antd';
+// Total antd module size is 324K gzipped, so we must selectively import
+import Card from 'antd/lib/card/';
+import Form from 'antd/lib/form/';
+import Button from 'antd/lib/button/';
+import Input from 'antd/lib/input/';
+import Icon from 'antd/lib/icon/';
+
 const FormItem = Form.Item;
 
 class SearchForm extends Component {
