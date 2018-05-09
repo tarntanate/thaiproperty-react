@@ -1,8 +1,10 @@
 ﻿import React from 'react';
 import { Route } from 'react-router';
-import Layout from './UI/Layout';
-import Home from './components/Home';
-import ProjectList from './components/ProjectList';
+import Layout from './components/Layout';
+
+// Containers as route
+import Home from './containers/Home';
+import ProjectList from './containers/ProjectList';
 
 export default () => (
   <Layout>

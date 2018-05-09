@@ -1,4 +1,4 @@
-import { notification } from 'antd';
+import notification from 'antd/lib/notification';
 import { SHOW_MESSAGE_DURATION } from '../../config';
 
 export const openNotification = ({ message, description, type = 'open' }) => {

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Card } from 'antd';
 import { NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import SearchForm from './Shared/SearchForm';
+import SearchForm from '../components/Shared/SearchForm';
 
 const Home = props => (
   <div style={{ marginTop: 20 }}>

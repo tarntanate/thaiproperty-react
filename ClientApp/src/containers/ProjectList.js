@@ -1,12 +1,13 @@
+// import libraries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Input, Spin, Slider, notification, Alert } from 'antd';
-// import _ from 'lodash';
+import throttle from 'lodash/throttle';
 
 // import user libriers
-import { actionCreators } from '../reducers/ProjectList';
-import GoogleMapWithMarkerClusterer from './GoogleMapHoc/GoogleMapWithMarkerClusterer';
+import { actionCreators } from '../redux/actions/ProjectList';
+import GoogleMapWithMarkerClusterer from '../components/GoogleMapHoc/GoogleMapWithMarkerClusterer';
 import { openNotification } from '../components/Shared/Notification';
 import { GOOGLE_MAP_DEFAULT_CENTER } from '../config.js';
 

@@ -1,13 +1,8 @@
 import configureMockStore from 'redux-mock-store';
 // import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import {
-  actionCreators,
-  requestProjectList,
-  receivedProjectList,
-  errorReceivingProjectList,
-  reducer,
-} from '../../reducers/ProjectList';
+import { actionCreators, LOAD_PROJECTS_REQUEST, LOAD_PROJECTS_ERROR } from '../../redux/actions/ProjectList';
+import { reducer } from '../../redux/reducers/ProjectList';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -35,32 +30,30 @@ describe('ProjectList Reducer', () => {
   //   // expect(response.Id).toBe(1);
   // });
 
+  it('Reducers should return error message and set isLoading to false if error occurs', () => {
+    const result = reducer(null, {type : LOAD_PROJECTS_ERROR});
+    expect(result.errorMessage).toBe(undefined);
+    expect(result.isLoading).toBe(false);
+  });
+
   it('Should get data from api without error', () => {
     const limitResult = 5;
     const store = mockStore({
       projects: []
     });
 
-    const action = store.dispatch(actionCreators.requestProjectList(limitResult)).then(result => {
+    store.dispatch(actionCreators.requestProjectList(limitResult)).then(result => {
       // return of async actions
       // console.log(result);
       var actualActions = store.getActions();
 
       console.info('getAction=', actualActions);
-      expect(actualActions[0].type).toEqual(requestProjectList);
+      expect(actualActions[0].type).toEqual(LOAD_PROJECTS_REQUEST);
       // expect(result[1].type).toEqual(receivedProjectList);
       // expect(result[1].data.length).toEqual(limitResult);
     });
-
-    return action;
-    // action().then(xxx => {
-    //   console.warn('xxx', xxx);
-    // });
-    // return action(result2 => {
-    //   console.log('action=', action);
-    // });
-    // done();
   });
+  
 
   // it('Data should match with snapshot', () => {
   //   const limitResult = 1;
