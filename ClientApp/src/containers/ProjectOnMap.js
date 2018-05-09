@@ -14,8 +14,8 @@ import { GOOGLE_MAP_DEFAULT_CENTER } from '../config.js';
 // local configuration value
 const MAX_PROJECT_AVG_PRICE_PER_SQM = 350000;
 const SLIDER_AVG_PRICE_STEP = 10000;
-const LIMIT_PROJECTS_SHOW_ON_MAP = 100; // for performance reason of Google Map on rendering too many markers
-const LIMIT_PROJECTS_FROM_API = 200; // too much results will increase in API loading time and more memory usage
+const LIMIT_PROJECTS_SHOW_ON_MAP = 150; // for performance reason of Google Map on rendering too many markers
+const LIMIT_PROJECTS_FROM_API = 150; // too much results will increase in API loading time and more memory usage
 
 class ProjectOnMap extends Component {
   state = {
@@ -50,25 +50,22 @@ class ProjectOnMap extends Component {
     if (projects && projects.length > 0) {
       // trigger after success fetched data
       this.setState({ projectList: projects.slice(0, LIMIT_PROJECTS_SHOW_ON_MAP) });
-      if (this.state.showInitialMessage) {
-        this.showInitialNotification(projects.length);
-      }
+      this.state.showInitialMessage && this.showTotalNumberOfProjects(projects.length);
     }
   }
 
-  showInitialNotification(totalProjects) {
-    // console.debug('show initial notification');
+  showTotalNumberOfProjects(totalProjects) {
     if (totalProjects > LIMIT_PROJECTS_SHOW_ON_MAP) {
       // show notification about limiting number of project list on map
-      this.showDelayedMessage(
+      this.delayedNotification(
         `จำกัดการแสดงผลโครงการคอนโดบนแผนที่สูงสุดไม่เกิน ${LIMIT_PROJECTS_SHOW_ON_MAP} โครงการ (จากทั้งหมด ${totalProjects} โครงการ)`,
       );
     } else {
-      this.showDelayedMessage(`แสดงรายการโครงการคอนโดทั้งหมด ${totalProjects} โครงการ`);
+      this.delayedNotification(`แสดงรายการโครงการคอนโดทั้งหมด ${totalProjects} โครงการ`);
     }
   }
 
-  showDelayedMessage(message) {
+  delayedNotification(message) {
     setTimeout(() => {
       // message.info(msg, SHOW_MESSAGE_DURATION);
       // clearTimeout();
