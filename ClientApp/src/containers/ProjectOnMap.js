@@ -1,4 +1,3 @@
-// import libraries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -35,7 +34,7 @@ class ProjectOnMap extends Component {
 
   componentWillReceiveProps({ projects, errorMessage }) {
     // Triggers when recieving project list on redux store as a props
-    // Destructing projectList from nextProps
+    // Destructing 'projects' and 'errorMessage' object from nextProps
     if (errorMessage) {
       notification.config({
         placement: 'bottomRight',
@@ -48,7 +47,7 @@ class ProjectOnMap extends Component {
     }
 
     if (projects && projects.length > 0) {
-      // trigger after success fetched data
+      // call after successfully fetched data
       this.setState({ projectList: projects.slice(0, LIMIT_PROJECTS_SHOW_ON_MAP) });
       this.state.showInitialMessage && this.showTotalNumberOfProjects(projects.length);
     }
@@ -67,7 +66,6 @@ class ProjectOnMap extends Component {
 
   delayedNotification(message) {
     setTimeout(() => {
-      // message.info(msg, SHOW_MESSAGE_DURATION);
       // clearTimeout();
       openNotification({ message });
     }, 200);
