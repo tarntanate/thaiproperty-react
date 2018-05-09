@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Input, Spin, Slider, notification } from 'antd';
+import Input from 'antd/lib/input/';
+import Slider from 'antd/lib/slider'
 
 // import user libriers
 import GoogleMapWithMarkerClusterer from '../components/GoogleMapHoc/GoogleMapWithMarkerClusterer';
@@ -37,14 +38,7 @@ class ProjectOnMap extends Component {
     // Triggers when recieving project list on redux store as a props
     // Destructing 'projects' and 'errorMessage' object from nextProps
     if (errorMessage) {
-      notification.config({
-        placement: 'bottomRight',
-      });
-      notification.error({
-        message: 'Error loading projects',
-        description: errorMessage,
-        duration: 15,
-      });
+      openNotification({ message: 'Error loading data', description: errorMessage, type: 'error'});
     }
 
     if (projects && projects.length > 0) {
@@ -154,7 +148,7 @@ class ProjectOnMap extends Component {
       this.setState({
         isLoading: false,
       });
-    }, 200);
+    }, 500);
   };
 
   onProjectMarkerClicked = ({ projectId, projectName, projectNameEn, avgPricePerArea }) => {
@@ -215,7 +209,7 @@ class ProjectOnMap extends Component {
               )}
               {this.state.isLoading && (
                 <span style={{ fontStyle: 'italic' }}>
-                  <Spin size="small" style={{ marginLeft: '10px', marginRight: '10px' }} />กำลังอัพเดตแผนที่...
+                  <Spinner size="small" style={{ marginLeft: '10px', marginRight: '10px' }} />กำลังอัพเดตแผนที่...
                 </span>
               )}
             </div>

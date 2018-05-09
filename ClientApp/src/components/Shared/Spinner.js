@@ -1,6 +1,6 @@
 import React from 'react';
 import Spin from 'antd/lib/spin';
 
-export const Spinner = () => (
-  <Spin size="large" />
+export const Spinner = ({size = 'large', style}) => (
+  <Spin size={size} style={style} />
 )
