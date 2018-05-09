@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card } from 'antd';
-import { NavItem } from 'react-bootstrap';
+import Card from 'antd/lib/card';
+import NavItem from 'react-bootstrap/lib/NavItem';
 import { LinkContainer } from 'react-router-bootstrap';
 import SearchForm from '../components/Shared/SearchForm';
 

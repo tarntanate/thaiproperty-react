@@ -28,7 +28,7 @@ export default function configureStore(history, initialState) {
   store.subscribe(throttle(()=> {
     // do something each time state changes
     // but wrap inside throttle function to avoid calling too often
-    console.log(store.getState());
+    console.log('state changed...', store.getState());
   }, 1000));
 
   return store;

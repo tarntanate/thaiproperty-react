@@ -11,11 +11,13 @@ import GoogleMapWithMarkerClusterer from '../components/GoogleMapHoc/GoogleMapWi
 import { openNotification } from '../components/Shared/Notification';
 import { GOOGLE_MAP_DEFAULT_CENTER } from '../config.js';
 
+// local configuration value
 const MAX_PROJECT_AVG_PRICE_PER_SQM = 350000;
 const SLIDER_AVG_PRICE_STEP = 10000;
-const LIMIT_PROJECTS_SHOW_ON_MAP = 100; // for performance reason of Google Map rendering too much markers
+const LIMIT_PROJECTS_SHOW_ON_MAP = 100; // for performance reason of Google Map on rendering too many markers
+const LIMIT_PROJECTS_FROM_API = 200; // too much results will increase in API loading time and more memory usage
 
-class ProjectList extends Component {
+class ProjectOnMap extends Component {
   state = {
     projectList: [], // store the complete projects list from API
     currentLocation: GOOGLE_MAP_DEFAULT_CENTER, // init default map position, then get from geolocation api later if user is allow
@@ -23,15 +25,15 @@ class ProjectList extends Component {
     maxAvgPrice: MAX_PROJECT_AVG_PRICE_PER_SQM,
     searchText: '',
     isLoading: false, // this is local loading from search filter or sliding price limit
-    showInitialMessage: true, // this allow to show notification only one time
+    showInitialMessage: true, // this option use to show notification on initial page load
   };
 
   componentWillMount() {
-    const limitRecordsFromAPI = 250; // too much results will increase in API loading time and more memory usage
-    this.props.requestProjectList(limitRecordsFromAPI); // call redux action creator 'requestProjectList'
+    // call redux action creator
+    this.props.requestProjectList(LIMIT_PROJECTS_FROM_API);
   }
 
-  componentWillReceiveProps({ projectList, errorMessage }) {
+  componentWillReceiveProps({ projects, errorMessage }) {
     // Triggers when recieving project list on redux store as a props
     // Destructing projectList from nextProps
     if (errorMessage) {
@@ -44,32 +46,37 @@ class ProjectList extends Component {
         duration: 15,
       });
     }
-    if (projectList) {
-      this.setProjectListToStateWithLimitResult(projectList);
-    }
-    if (this.state.projectList.length > 0 && projectList) {
-      this.showNumberOfProjectsOnNotification(projectList.length);
+    // if (projects) {
+      
+    // }
+    if (projects && projects.length > 0) {
+      // trigger after success fetched data
+      this.setProjectListToStateWithLimitResult(projects);
+      // show notification about limiting number of project list on map
+      this.showNumberOfProjectsOnNotification(projects.length);
     }
   }
 
-  setProjectListToStateWithLimitResult(projectList) {
-    this.setState({ projectList: projectList.slice(0, LIMIT_PROJECTS_SHOW_ON_MAP) });
+  setProjectListToStateWithLimitResult(projects) {
+    console.debug('set projects (from redux as props) to component state with limit result');
+    this.setState({ projectList: projects.slice(0, LIMIT_PROJECTS_SHOW_ON_MAP) });
   }
 
-  showNumberOfProjectsOnNotification(actualLength) {
-    if (this.state.showInitialMessage && actualLength > LIMIT_PROJECTS_SHOW_ON_MAP) {
+  showNumberOfProjectsOnNotification(totalProjects) {
+    console.debug('show total number of projects notifications');
+    if (this.state.showInitialMessage && totalProjects > LIMIT_PROJECTS_SHOW_ON_MAP) {
       this.showDelayedMessage(
-        `จำกัดการแสดงผลโครงการคอนโดบนแผนที่สูงสุดไม่เกิน ${LIMIT_PROJECTS_SHOW_ON_MAP} โครงการ (จากทั้งหมด ${actualLength} โครงการ)`,
+        `จำกัดการแสดงผลโครงการคอนโดบนแผนที่สูงสุดไม่เกิน ${LIMIT_PROJECTS_SHOW_ON_MAP} โครงการ (จากทั้งหมด ${totalProjects} โครงการ)`,
       );
     } else {
-      this.showDelayedMessage(`แสดงรายการโครงการคอนโดทั้งหมด ${actualLength} โครงการ`);
+      this.showDelayedMessage(`แสดงรายการโครงการคอนโดทั้งหมด ${totalProjects} โครงการ`);
     }
   }
 
   showDelayedMessage(message) {
     setTimeout(() => {
       // message.info(msg, SHOW_MESSAGE_DURATION);
-      clearTimeout();
+      // clearTimeout();
       openNotification({ message });
     }, 200);
   }
@@ -119,7 +126,7 @@ class ProjectList extends Component {
     const filterName = e.target.value.toLowerCase();
 
     // filtered data from redux store
-    const filteredProjects = this.props.projectList.filter(
+    const filteredProjects = this.props.projects.filter(
       project =>
         project.location.lat != null &&
         (project.projectName.toLowerCase().indexOf(filterName) >= 0 ||
@@ -137,7 +144,7 @@ class ProjectList extends Component {
     // reset the searchText on sliding
     this.setState({ isLoading: true, minAvgPrice, maxAvgPrice, searchText: '' });
 
-    const filteredProjects = this.props.projectList
+    const filteredProjects = this.props.projects
       .filter(
         project =>
           project.location.lat != null &&
@@ -160,6 +167,7 @@ class ProjectList extends Component {
   };
 
   onProjectMarkerClicked = ({ projectId, projectName, projectNameEn, avgPricePerArea }) => {
+    console.log('projectId =', projectId);
     let formattedPrice = avgPricePerArea.toLocaleString('en', { maximumSignificantDigits: 3 });
     let message = `โครงการ ${projectName}`;
     let description = `ราคาเฉลี่ย ${formattedPrice}/ตรม.`;
@@ -234,6 +242,7 @@ class ProjectList extends Component {
   }
 }
 
-export default connect(state => state.projectList, dispatch => bindActionCreators(actionCreators, dispatch))(
-  ProjectList,
-);
+export default connect(
+  // map the state from redux store (projectList) into props
+  state => state.projectList,
+  dispatch => bindActionCreators(actionCreators, dispatch))(ProjectOnMap);

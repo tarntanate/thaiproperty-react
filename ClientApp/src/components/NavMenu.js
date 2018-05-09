@@ -19,7 +19,7 @@ export default props => (
             <Glyphicon glyph="home" /> Home
           </NavItem>
         </LinkContainer>
-        <LinkContainer to={'/projectlist'}>
+        <LinkContainer to={'/projectonmap'}>
           <NavItem>
             <Glyphicon glyph="map-marker" /> Condominium Project List on Map
           </NavItem>

@@ -23,7 +23,7 @@ export const reducer = (state = initialState, action) => {
     return {
       ...state,
       // We filtered only the projects that have location from the API
-      projectList: action.data,
+      projects: action.data,
       // projectList: action.data.filter(project => project.location.lat != null),
       isLoading: false,
     };

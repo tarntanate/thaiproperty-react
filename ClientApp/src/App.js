@@ -4,11 +4,13 @@ import Layout from './components/Layout';
 
 // Containers as route
 import Home from './containers/Home';
-import ProjectList from './containers/ProjectList';
+import ProjectOnMap from './containers/ProjectOnMap';
+import Project from './containers/Project';
 
 export default () => (
   <Layout>
     <Route exact path="/" component={Home} />
-    <Route path="/projectlist" component={ProjectList} />
+    <Route path="/projectonmap" component={ProjectOnMap} />
+    <Route path="/project/:id" component={Project} />
   </Layout>
 );
