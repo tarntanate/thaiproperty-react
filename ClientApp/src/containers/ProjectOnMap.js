@@ -4,9 +4,10 @@ import { bindActionCreators } from 'redux';
 import { Input, Spin, Slider, notification } from 'antd';
 
 // import user libriers
-import { actionCreators } from '../redux/actions/ProjectList';
 import GoogleMapWithMarkerClusterer from '../components/GoogleMapHoc/GoogleMapWithMarkerClusterer';
+import { actionCreators } from '../redux/actions/ProjectList';
 import { openNotification } from '../components/Shared/Notification';
+import { Spinner } from '../components/Shared/Spinner';
 import { ErrorMessage } from '../components/Shared/ErrorMessage';
 import { GOOGLE_MAP_DEFAULT_CENTER } from '../config.js';
 
@@ -170,7 +171,7 @@ class ProjectOnMap extends Component {
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           Loading condominium projects and map... <br />
           <br />
-          <Spin size="large" />
+          <Spinner />
         </div>
       );
     }
