@@ -20,7 +20,7 @@ const LIMIT_PROJECTS_FROM_API = 150; // too much results will increase in API lo
 
 class ProjectOnMap extends Component {
   state = {
-    projectList: [], // store the complete projects list from API
+    projectList: [], // store the filtered projects list
     currentLocation: GOOGLE_MAP_DEFAULT_CENTER, // init default map position, then get from geolocation api later if user is allow
     minAvgPrice: 0,
     maxAvgPrice: MAX_PROJECT_AVG_PRICE_PER_SQM,
@@ -38,7 +38,7 @@ class ProjectOnMap extends Component {
     // Triggers when recieving project list on redux store as a props
     // Destructing 'projects' and 'errorMessage' object from nextProps
     if (errorMessage) {
-      openNotification({ message: 'Error loading data', description: errorMessage, type: 'error'});
+      openNotification({ message: 'Error loading data', description: errorMessage, type: 'error', duration: 8 });
     }
 
     if (projects && projects.length > 0) {
@@ -50,7 +50,7 @@ class ProjectOnMap extends Component {
 
   showTotalNumberOfProjects(totalProjects) {
     if (totalProjects > LIMIT_PROJECTS_SHOW_ON_MAP) {
-      // show notification about limiting number of project list on map
+      // show notification about limiting projects show on map
       this.delayedNotification(
         `จำกัดการแสดงผลโครงการคอนโดบนแผนที่สูงสุดไม่เกิน ${LIMIT_PROJECTS_SHOW_ON_MAP} โครงการ (จากทั้งหมด ${totalProjects} โครงการ)`,
       );
@@ -108,14 +108,14 @@ class ProjectOnMap extends Component {
       minAvgPrice: 0,
       maxAvgPrice: MAX_PROJECT_AVG_PRICE_PER_SQM,
     });
-    const filterName = e.target.value.toLowerCase();
+    const searchText = e.target.value.toLowerCase();
 
     // filtered data from redux store
     const filteredProjects = this.props.projects.filter(
       project =>
         project.location.lat != null &&
-        (project.projectName.toLowerCase().indexOf(filterName) >= 0 ||
-          (project.projectNameEn && project.projectNameEn.toLowerCase().indexOf(filterName) >= 0)),
+        (project.projectName.toLowerCase().indexOf(searchText) >= 0 ||
+          (project.projectNameEn && project.projectNameEn.toLowerCase().indexOf(searchText) >= 0)),
     );
     console.debug('filteredProject=', filteredProjects);
 
