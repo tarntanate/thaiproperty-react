@@ -46,25 +46,20 @@ class ProjectOnMap extends Component {
         duration: 15,
       });
     }
-    // if (projects) {
-      
-    // }
+
     if (projects && projects.length > 0) {
       // trigger after success fetched data
-      this.setProjectListToStateWithLimitResult(projects);
-      // show notification about limiting number of project list on map
-      this.showNumberOfProjectsOnNotification(projects.length);
+      this.setState({ projectList: projects.slice(0, LIMIT_PROJECTS_SHOW_ON_MAP) });
+      if (this.state.showInitialMessage) {
+        this.showInitialNotification(projects.length);
+      }
     }
   }
 
-  setProjectListToStateWithLimitResult(projects) {
-    console.debug('set projects (from redux as props) to component state with limit result');
-    this.setState({ projectList: projects.slice(0, LIMIT_PROJECTS_SHOW_ON_MAP) });
-  }
-
-  showNumberOfProjectsOnNotification(totalProjects) {
-    console.debug('show total number of projects notifications');
-    if (this.state.showInitialMessage && totalProjects > LIMIT_PROJECTS_SHOW_ON_MAP) {
+  showInitialNotification(totalProjects) {
+    // console.debug('show initial notification');
+    if (totalProjects > LIMIT_PROJECTS_SHOW_ON_MAP) {
+      // show notification about limiting number of project list on map
       this.showDelayedMessage(
         `จำกัดการแสดงผลโครงการคอนโดบนแผนที่สูงสุดไม่เกิน ${LIMIT_PROJECTS_SHOW_ON_MAP} โครงการ (จากทั้งหมด ${totalProjects} โครงการ)`,
       );
