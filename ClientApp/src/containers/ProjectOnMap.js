@@ -2,13 +2,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Input, Spin, Slider, notification, Alert } from 'antd';
-import throttle from 'lodash/throttle';
+import { Input, Spin, Slider, notification } from 'antd';
 
 // import user libriers
 import { actionCreators } from '../redux/actions/ProjectList';
 import GoogleMapWithMarkerClusterer from '../components/GoogleMapHoc/GoogleMapWithMarkerClusterer';
 import { openNotification } from '../components/Shared/Notification';
+import { ErrorMessage } from '../components/Shared/ErrorMessage';
 import { GOOGLE_MAP_DEFAULT_CENTER } from '../config.js';
 
 // local configuration value
@@ -188,9 +188,7 @@ class ProjectOnMap extends Component {
     return (
       <div style={{ margin: '5px' }}>
         {this.props.errorMessage && (
-          <div style={{ margin: 20 }}>
-            <Alert message="มีข้อผิดพลาด" description={this.props.errorMessage} type="error" showIcon />
-          </div>
+          <ErrorMessage text={this.props.errorMessage} />
         )}
         {!this.props.errorMessage && (
           <div style={{ marginLeft: '20px', marginRight: '20px' }}>

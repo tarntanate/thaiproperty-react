@@ -12,5 +12,6 @@ export default () => (
     <Route exact path="/" component={Home} />
     <Route path="/projectonmap" component={ProjectOnMap} />
     <Route path="/project/:id" component={Project} />
+    <Route path="/post/:id" component={Project} />
   </Layout>
 );
