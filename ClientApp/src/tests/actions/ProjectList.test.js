@@ -3,7 +3,7 @@ import {
   actionCreators
 } from '../../redux/actions/ProjectList';
 
-describe('ProjectList Actions', () => {
+describe('ProjectList Action Creators', () => {
   it('Request action creator should return a function', () => {
     const result = actionCreators.requestProjectList();
 
