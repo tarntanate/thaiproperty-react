@@ -18,3 +18,11 @@ export const GOOGLE_CLUSTERER_GRID_SIZE = 20; // how far to group nearest marker
 // message notifications options
 export const SHOW_MESSAGE_DURATION = 5; // seconds
 export const SHOW_MESSAGE_DURATION_EXTENDED = 10; // seconds
+
+export const getApiServerUrl = () => {
+    if ((process.env && process.env.NODE_ENV === 'development') || process.env.NODE_ENV === 'test') {
+      return API_BASE_URL_DEV;
+    } else {
+      return API_BASE_URL_PROD;
+    }
+}

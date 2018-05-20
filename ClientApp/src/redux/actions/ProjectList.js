@@ -1,4 +1,4 @@
-import { API_BASE_URL_DEV, API_BASE_URL_PROD } from '../../config.js';
+import { getApiServerUrl } from '../../config.js';
 
 // action types
 export const LOAD_PROJECTS_REQUEST = 'LOAD_PROJECTS_REQUEST';
@@ -7,7 +7,7 @@ export const LOAD_PROJECTS_ERROR = 'LOAD_PROJECTS_ERROR';
 
 // action creators
 export const actionCreators = {
-  // 'requestProjectList' is a thunk action creator is a function that returns a function
+  // 'requestProjectList' is an action creator which is a function that returns a function (require thunk)
   // it is the same as return (dispatch, getState) => {}
   requestProjectList: limitResult => async (dispatch, getState) => {
     if (limitResult === 0) {
@@ -18,16 +18,12 @@ export const actionCreators = {
       type: LOAD_PROJECTS_REQUEST
     });
 
-    var apiServer = API_BASE_URL_PROD;
-    if ((process.env && process.env.NODE_ENV === 'development') || process.env.NODE_ENV === 'test') {
-      apiServer = API_BASE_URL_DEV;
-    }
-
-    let apiUrl = `${apiServer}/Project/GetAllProjectsWithAvgPrice`;
+    let apiUrl = `${getApiServerUrl()}/Project/GetAllProjectsWithAvgPrice`;
     if (limitResult) {
       apiUrl = apiUrl + `?limitResult=${limitResult}`;
     }
-    console.debug('Requesting API:', apiUrl);
+    console.debug(`%c Requesting API: ${apiUrl}`,'color: #3366aa; font-weight: bold');
+    
     const result = fetch(apiUrl);
     return result
       .then(handleErrors)
@@ -52,7 +48,7 @@ export const actionCreators = {
 
 const handleErrors = (response) => {
   // handle server response with non Ok status
-  console.log('response=',response);
+  // console.log('response=',response);
   if (!response.ok) {
     // throw an exception which will go into the catch exception section
     throw Error('Server Error: ' + response.status + ' - ' + response.statusText);

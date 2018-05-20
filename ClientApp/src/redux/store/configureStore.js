@@ -1,17 +1,22 @@
 ﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
+import logger from 'redux-logger';
 import * as ProjectList from '../reducers/ProjectList';
 import throttle from 'lodash/throttle';
 
 export default function configureStore(history, initialState) {
-  const middleware = [thunk, routerMiddleware(history)];
-
   // In development, use the browser's Redux dev tools extension if installed
-  const enhancers = [];
   const isDevelopment = process.env.NODE_ENV === 'development';
+  const enhancers = [];
   if (isDevelopment && typeof window !== 'undefined' && window.devToolsExtension) {
     enhancers.push(window.devToolsExtension());
+  }
+
+  // Configure Redux middlewares
+  const middleware = [thunk, routerMiddleware(history)];
+  if (isDevelopment) {
+    middleware.push(logger);
   }
 
   const reducers = {
