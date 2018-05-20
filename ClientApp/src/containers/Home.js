@@ -8,11 +8,11 @@ import SearchForm from '../components/Shared/SearchForm';
 
 const Home = props => (
   <div style={{ marginTop: 20 }}>
-    <LinkContainer to={'/projectlist'}>
+    <LinkContainer to={'/projectonmap'}>
       <NavItem>Click here to see a demo of Condominium Project List on Map</NavItem>
     </LinkContainer>
     <div>
-      <button type="button" onClick={()=> routerActions.goBack()}>Test Push Redux Location</button>
+      <button type="button" onClick={()=> routerActions.push('/projectonmap')}>Test Push Redux Location</button>
     </div>
     {false && (
       <Card title="Under development!" bordered={true} style={{ width: 360, marginTop: 20 }}>

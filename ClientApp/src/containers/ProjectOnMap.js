@@ -31,7 +31,13 @@ class ProjectOnMap extends Component {
 
   componentWillMount() {
     // call redux action creator
-    this.props.requestProjectList(LIMIT_PROJECTS_FROM_API);
+    const { projects } = this.props;
+    if (projects.length === 0) {
+      this.props.requestProjectList(LIMIT_PROJECTS_FROM_API);
+    } else {
+      // visit this page second time or redux has already fetched data
+      this.setState({ projectList: projects.slice(0, LIMIT_PROJECTS_SHOW_ON_MAP) });
+    }
   }
 
   componentWillReceiveProps({ projects, errorMessage }) {
@@ -46,6 +52,11 @@ class ProjectOnMap extends Component {
       this.setState({ projectList: projects.slice(0, LIMIT_PROJECTS_SHOW_ON_MAP) });
       this.state.showInitialMessage && this.showTotalNumberOfProjects(projects.length);
     }
+  }
+
+  componentWillUnmount() {
+    // Clear or reset any redux state (if any) when navigate away from this page.
+    console.log('ProjectOnMap Unmount');
   }
 
   showTotalNumberOfProjects(totalProjects) {
