@@ -38,9 +38,10 @@ export const actionCreators = {
         });
       })
       .catch(err => {
+        // Tutorial here https://egghead.io/lessons/javascript-redux-displaying-error-messages
         dispatch({
           type: LOAD_PROJECTS_ERROR,
-          errorMessage: `ไม่สามารถดึงข้อมูลได้ (${err.message})`,
+          errorMessage: err.message ? `ไม่สามารถดึงข้อมูลได้ (${err.message})` : 'Error fetching data',
         });
       });
   },
