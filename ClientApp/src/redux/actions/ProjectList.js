@@ -7,7 +7,7 @@ export const LOAD_PROJECTS_ERROR = 'LOAD_PROJECTS_ERROR';
 
 // action creators
 export const actionCreators = {
-  // 'requestProjectList' is an action creator which is a function that returns a function (require thunk)
+  // 'requestProjectList' is a thunk action creator which is a function that returns a function (require thunk middleware)
   // it is the same as return (dispatch, getState) => {}
   requestProjectList: limitResult => async (dispatch, getState) => {
     if (limitResult === 0) {
