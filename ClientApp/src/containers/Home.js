@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { routerActions } from 'react-router-redux';
+// import { routerActions } from 'react-router-redux';
 import Card from 'antd/lib/card';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -12,7 +12,7 @@ const Home = props => (
       <NavItem>Click here to see a demo of Condominium Project List on Map</NavItem>
     </LinkContainer>
     <div>
-      <button type="button" onClick={()=> routerActions.push('/projectonmap')}>Test Push Redux Location</button>
+      <button type="button" className="btn btn-primary" onClick={()=> props.history.push('/projectonmap')}>Test Push Redux Location</button>
     </div>
     {false && (
       <Card title="Under development!" bordered={true} style={{ width: 360, marginTop: 20 }}>
