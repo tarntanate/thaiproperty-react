@@ -24,26 +24,45 @@ export const actionCreators = {
     }
     console.debug(`%c Requesting API: ${apiUrl}`,'color: #3366aa; font-weight: bold');
     
-    const result = fetch(apiUrl);
-    return result
-      .then(handleErrors)
-      .then(response => {
-        // console.log('response=', response);
-        response.json().then(data => {
-          // after getting data from await, then dispatch a new action with data received from API
-          dispatch({
-            type: LOAD_PROJECTS_SUCCESS,
-            data
-          });
-        });
-      })
-      .catch(err => {
-        // Tutorial here https://egghead.io/lessons/javascript-redux-displaying-error-messages
-        dispatch({
-          type: LOAD_PROJECTS_ERROR,
-          errorMessage: err.message ? `ไม่สามารถดึงข้อมูลได้ (${err.message})` : 'Error fetching data',
-        });
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      
+      if (!response.ok) {
+        // throw an exception which will go into the catch exception section
+        throw Error('Server Error: ' + response.status + ' - ' + response.statusText);
+      }
+      dispatch({
+        type: LOAD_PROJECTS_SUCCESS,
+        data
       });
+    } catch (err) {
+      dispatch({
+        type: LOAD_PROJECTS_ERROR,
+        errorMessage: err.message ? `ไม่สามารถดึงข้อมูลได้ (${err.message})` : 'Error fetching data',
+      });
+    }
+
+    
+    // return result
+    //   .then(handleErrors)
+    //   .then(response => {
+    //     // console.log('response=', response);
+    //     response.json().then(data => {
+    //       // after getting data from await, then dispatch a new action with data received from API
+    //       dispatch({
+    //         type: LOAD_PROJECTS_SUCCESS,
+    //         data
+    //       });
+    //     });
+    //   })
+    //   .catch(err => {
+    //     // Tutorial here https://egghead.io/lessons/javascript-redux-displaying-error-messages
+    //     dispatch({
+    //       type: LOAD_PROJECTS_ERROR,
+    //       errorMessage: err.message ? `ไม่สามารถดึงข้อมูลได้ (${err.message})` : 'Error fetching data',
+    //     });
+    //   });
   },
 };
 
