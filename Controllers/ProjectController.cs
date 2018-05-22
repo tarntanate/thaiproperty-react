@@ -13,7 +13,7 @@ namespace Thaiproperty.Controllers
   [Route("api/[controller]/[action]")]
   public class ProjectController : Controller
   {
-    private readonly ThaipropertyDbContext dbContext;
+    private readonly ThaipropertyDbContext _dbContext;
     private const string SERVER_URL = "http://www.thaiproperty.in.th";
     private const string IMAGE_FOLDER = "images";
     private const string IMAGE_THUMBNAIL_SIZE = "200x150";
@@ -28,13 +28,13 @@ namespace Thaiproperty.Controllers
 
     public ProjectController(ThaipropertyDbContext dbContext)
     {
-      this.dbContext = dbContext;
+      this._dbContext = dbContext;
     }
 
     [HttpGet("{limitResult?}")]
     public IActionResult GetAllProjects(int limitResult = 300)
     {
-      var result = dbContext.NewProject
+      var result = _dbContext.NewProject
         .AsNoTracking()
         // .Include(p => p.Type)
         // .Include(p => p.Province)
@@ -46,7 +46,7 @@ namespace Thaiproperty.Controllers
           ProjectNameEn = p.ProjectNameEn,
           // ProjectImageUrl = p.ProjectImageUrl,
           CompanyId = p.CompanyId,
-          TotalPost = dbContext.PropPost.Count(post => post.ProjectId == p.ProjectId),
+          TotalPost = _dbContext.PropPost.Count(post => post.ProjectId == p.ProjectId),
           Location = new Location
           {
             Lat = p.LocationX,
@@ -68,7 +68,7 @@ namespace Thaiproperty.Controllers
     [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Any, NoStore = false)]
     public IActionResult GetAllProjectsWithAvgPrice(int limitResult = 200)
     {
-      var result = dbContext.NewProject
+      var result = _dbContext.NewProject
         .AsNoTracking()
         // .Include(p => p.Type)
         // .Include(p => p.Province)
@@ -80,12 +80,12 @@ namespace Thaiproperty.Controllers
           ProjectNameEn = p.ProjectNameEn,
           // ProjectImageUrl = p.ProjectImageUrl,
           CompanyId = p.CompanyId,
-          TotalPost = dbContext.PropPost.Count(post => post.ProjectId == p.ProjectId),
+          TotalPost = _dbContext.PropPost.Count(post => post.ProjectId == p.ProjectId),
           // AvgPrice = dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Average(post => post.Price),
           // AvgArea = dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Average(post => post.Area),
           AvgPricePerArea =
-            dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Average(post => post.Price) /
-            dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Average(post => post.Area),
+            _dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Average(post => post.Price) /
+            _dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Average(post => post.Area),
           Location = new Location
           {
             Lat = p.LocationX,
@@ -114,7 +114,7 @@ namespace Thaiproperty.Controllers
     {
       if (keyword == null || keyword.Length < 2)
         return Ok();
-      var result = dbContext.NewProject
+      var result = _dbContext.NewProject
         .AsNoTracking()
         // .Include(p => p.Type)
         // .Include(p => p.Province)
