@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Thaiproperty.Common;
 using Thaiproperty.Models;
@@ -56,11 +58,14 @@ namespace Thaiproperty.Repositories
                     TotalPost = _dbContext.PropPost.Count(post => post.ProjectId == p.ProjectId),
                     // AvgPrice = dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Average(post => post.Price),
                     // AvgArea = dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Average(post => post.Area),
-                    AvgPricePerArea = 
+                    AvgPricePerArea =
                     (
                         // Calculate price per sqm. from post
-                        _dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Average(post => post.Price) /
-                        _dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Average(post => post.Area)
+                        // _dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Select(post => post.Price).DefaultIfEmpty().Average(post => post == null ? 0 : post.Price)
+                        _dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false).Select(post => post.Price).AverageOrNull()
+                        /
+                        _dbContext.PropPost.Where(post => post.ProjectId == p.ProjectId && post.ForRent == false)
+                            .Select(post => (int) post.Area).AverageOrNull()
                     ),
                     Location = new Location
                     {
@@ -71,4 +76,6 @@ namespace Thaiproperty.Repositories
                 });
         }
     }
+    
 }
+

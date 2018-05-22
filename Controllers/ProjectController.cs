@@ -38,17 +38,17 @@ namespace Thaiproperty.Controllers
 
         [HttpGet("{limit?}")]
         [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Any, NoStore = false)]
-        public async Task<IActionResult> CondominiumWithAvgPrice(int limit = _defaultLimit)
+        public IActionResult GetWithAvgPrice(int limit = _defaultLimit)
         {
-            var result = await _projectRepository.GetProjectListWithAvgPrice()
+            var result = _projectRepository.GetProjectListWithAvgPrice()
                 .Where(p => p.TotalPost > 0 
                     && p.ProjectTypeId == (int)Thaiproperty.Enum.PropertyType.Condominium 
                     && p.Location.Lat.HasValue 
-                    && p.AvgPricePerArea.HasValue)
+                    && p.AvgPricePerArea >= 0)
                 .OrderByDescending(p => p.TotalPost)
                 .Take(limit)
-                .Where(p => p.TotalPost > 0 && p.AvgPricePerArea.HasValue)
-                .ToListAsync();
+                .ToList()
+                .OrderBy(p => p.AvgPricePerArea);
 
             if (result == null)
             {
