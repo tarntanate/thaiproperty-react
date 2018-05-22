@@ -11,6 +11,7 @@ namespace Thaiproperty.ViewModels.Project
 		public string ProjectNameEn { get; set; }
 		public string ThumbnailUrl { get; set; }
 		public int TotalPost { get; set; }
+        public double? AvgPricePerArea { get; set; }
 		public Location Location { get; set; }
 	}
 }
