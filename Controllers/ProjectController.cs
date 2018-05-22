@@ -32,7 +32,7 @@ namespace Thaiproperty.Controllers
     }
 
     [HttpGet("{limitResult?}")]
-    public IActionResult GetAllProjects(int limitResult = 300)
+    public IActionResult AllProjects(int limitResult = 300)
     {
       var result = _dbContext.NewProject
         .AsNoTracking()
@@ -66,7 +66,7 @@ namespace Thaiproperty.Controllers
 
     [HttpGet("{limitResult?}")]
     [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Any, NoStore = false)]
-    public IActionResult GetAllProjectsWithAvgPrice(int limitResult = 200)
+    public IActionResult AllProjectsWithAvgPrice(int limitResult = 200)
     {
       var result = _dbContext.NewProject
         .AsNoTracking()
@@ -110,7 +110,7 @@ namespace Thaiproperty.Controllers
     }
 
     [HttpGet]
-    public IActionResult SearchProjects([FromQuery] string keyword)
+    public IActionResult Search([FromQuery] string keyword)
     {
       if (keyword == null || keyword.Length < 2)
         return Ok();
