@@ -61,7 +61,7 @@ namespace Thaiproperty.Controllers
             return Json(result);
         }
 
-        [HttpGet("{name}")]
+        [HttpGet]
         public async Task<IActionResult> Search([FromQuery] string name)
         {
             if (name == null || name.Length < 2)
