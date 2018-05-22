@@ -14,10 +14,10 @@ namespace Thaiproperty.Controllers
   public class ProjectController : Controller
   {
     private readonly ThaipropertyDbContext _dbContext;
-    private const string SERVER_URL = "http://www.thaiproperty.in.th";
-    private const string IMAGE_FOLDER = "images";
-    private const string IMAGE_THUMBNAIL_SIZE = "200x150";
-    private const string IMAGE_THUMBNAIL_QUALITY = "80";
+    private const string ServerUrl = "http://www.thaiproperty.in.th";
+    private const string ImageFolder = "images";
+    private const string ThumbnailSize = "200x150";
+    private const string ThumbnailQuality = "80";
 
     enum PropertyType
     {
@@ -52,7 +52,7 @@ namespace Thaiproperty.Controllers
             Lat = p.LocationX,
             Lng = p.LocationY
           },
-          ThumbnailUrl = $"{SERVER_URL}/images/project/{p.ProjectId}.jpg",
+          ThumbnailUrl = $"{ServerUrl}/images/project/{p.ProjectId}.jpg",
         })
         .OrderByDescending(p => p.TotalPost)
         .Take(limitResult);
@@ -91,7 +91,7 @@ namespace Thaiproperty.Controllers
             Lat = p.LocationX,
             Lng = p.LocationY
           },
-          ThumbnailUrl = $"{SERVER_URL}/images/project/{p.ProjectId}.jpg",
+          ThumbnailUrl = $"{ServerUrl}/images/project/{p.ProjectId}.jpg",
         })
         .Where(p => p.TotalPost > 0 && p.ProjectTypeId == (int)PropertyType.Condominium && p.Location.Lat.HasValue && p.AvgPricePerArea.HasValue)
         .OrderByDescending(p => p.TotalPost)
@@ -131,7 +131,7 @@ namespace Thaiproperty.Controllers
           },
           // ProjectImageUrl = p.ProjectImageUrl,
           CompanyId = p.CompanyId,
-          ThumbnailUrl = $"{SERVER_URL}/images/project/{p.ProjectId}.jpg",
+          ThumbnailUrl = $"{ServerUrl}/images/project/{p.ProjectId}.jpg",
         })
         .Where(p => p.ProjectName.IndexOf(keyword) >= 0 || p.ProjectNameEn.IndexOf(keyword) >= 0)
         .OrderBy(p => p.ProjectName)
