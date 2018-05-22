@@ -23,7 +23,7 @@ namespace Thaiproperty.Controllers
         }
 
         [HttpGet("{limit?}")]
-        public async Task<IActionResult> Get(int limit = _defaultLimit)
+        public async Task<IActionResult> All(int limit = _defaultLimit)
         {
             var result = await _projectRepository.GetProjectList()
                 .OrderByDescending(p => p.TotalPost)
@@ -38,11 +38,11 @@ namespace Thaiproperty.Controllers
 
         [HttpGet("{limit?}")]
         [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Any, NoStore = false)]
-        public async Task<IActionResult> GetWithAvgPrice(int limit = _defaultLimit)
+        public async Task<IActionResult> CondominiumWithAvgPrice(int limit = _defaultLimit)
         {
             var result = await _projectRepository.GetProjectListWithAvgPrice()
                 .Where(p => p.TotalPost > 0 
-                    && p.ProjectTypeId == (int)Thaiproperty.Common.PropertyType.Condominium 
+                    && p.ProjectTypeId == (int)Thaiproperty.Enum.PropertyType.Condominium 
                     && p.Location.Lat.HasValue 
                     && p.AvgPricePerArea.HasValue)
                 .OrderByDescending(p => p.TotalPost)
@@ -61,7 +61,7 @@ namespace Thaiproperty.Controllers
             return Json(result);
         }
 
-        [HttpGet]
+        [HttpGet("{name}")]
         public async Task<IActionResult> Search([FromQuery] string name)
         {
             if (name == null || name.Length < 2)

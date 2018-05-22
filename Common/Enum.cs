@@ -1,4 +1,4 @@
-namespace Thaiproperty.Common
+namespace Thaiproperty.Enum
 {
     enum PropertyType
     {
