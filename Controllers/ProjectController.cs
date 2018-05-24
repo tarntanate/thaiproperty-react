@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +12,21 @@ using Thaiproperty.ViewModels;
 
 namespace Thaiproperty.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     public class ProjectsController : Controller
     {
         private readonly ProjectRepository _projectRepository;
+        private readonly ILogger<ProjectsController> _logger;
         private const int _defaultLimit = 200;
 
-        public ProjectsController(ThaipropertyDbContext dbContext)
+        public ProjectsController(ThaipropertyDbContext dbContext, ILogger<ProjectsController> logger)
         {
             _projectRepository = new ProjectRepository(dbContext);
+            _logger = logger;
         }
 
         [HttpGet("{limit?}")]
-        public async Task<IActionResult> All(int limit = _defaultLimit)
+        public async Task<IActionResult> Get(int limit = _defaultLimit)
         {
             var result = await _projectRepository.GetProjectList()
                 .OrderByDescending(p => p.TotalPost)
@@ -36,14 +39,14 @@ namespace Thaiproperty.Controllers
             return Json(result);
         }
 
-        [HttpGet("{limit?}")]
+        [HttpGet("GetWithAvgPrice/{limit?}")]
         [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Any, NoStore = false)]
         public IActionResult GetWithAvgPrice(int limit = _defaultLimit)
         {
             var result = _projectRepository.GetProjectListWithAvgPrice()
                 .Where(p => p.TotalPost > 0 
                     && p.ProjectTypeId == (int)Thaiproperty.Enum.PropertyType.Condominium 
-                    && p.Location.Lat.HasValue 
+                    && p.Location.Lat.HasValue
                     && p.AvgPricePerArea >= 0)
                 .OrderByDescending(p => p.TotalPost)
                 .Take(limit)
@@ -78,6 +81,23 @@ namespace Thaiproperty.Controllers
                 return NotFound();
             }
             return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] NewProject project)
+        {
+            return Json(project);
+        }
+
+        [HttpGet]
+        [Route("Test")]
+        public IActionResult Test([FromBody] NewProject project)
+        {
+            Common.IUser user1 = new Common.User();
+            user1.firstName = "Tom";
+            user1.lastName = "Memanee";
+            _logger.LogCritical(user1.ToString());
+            return Json(user1);
         }
     }
 }

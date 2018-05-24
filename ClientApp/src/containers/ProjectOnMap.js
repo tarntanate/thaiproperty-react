@@ -29,7 +29,7 @@ class ProjectOnMap extends Component {
     showInitialMessage: true, // this option use to show notification on initial page load
   };
 
-  componentWillMount() {
+  componentDidMount() {
     // call redux action creator
     const { projects } = this.props;
     if (projects.length === 0) {
@@ -40,7 +40,7 @@ class ProjectOnMap extends Component {
     }
   }
 
-  componentWillReceiveProps({ projects, errorMessage }) {
+  UNSAFE_componentWillReceiveProps({ projects, errorMessage }) {
     // Triggers when recieving project list on redux store as a props
     // Destructing 'projects' and 'errorMessage' object from nextProps
     if (errorMessage) {
