@@ -3,7 +3,7 @@ import moment from 'moment/moment';
 import 'moment/locale/th';
 import Card from 'antd/lib/card';
 
-export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent, postDate, ...props}) => {
+export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent, project, postDate, ...props}) => {
     let sellingText = forRent ? 'ให้เช่า' : 'ขาย';
     let price = props.price.toLocaleString('thai', { style: 'decimal', minimumFractionDigits: 0 });
 
@@ -29,6 +29,8 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
                 {`${sellingText} ${price}`}
                 <br />
                 <span>เมื่อ {moment(postDate).fromNow()}</span>
+                {project && 
+                    <div><a href={`/project/${project.projectId}`}>{project.projectName}</a></div>}
             </span>
         </Card>
     );
