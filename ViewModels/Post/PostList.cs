@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Thaiproperty.Common;
 using Thaiproperty.Models;
 
-namespace Thaiproperty.ViewModels
+namespace Thaiproperty.ViewModels.Post
 {
     public class PostList
     {

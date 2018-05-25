@@ -4,7 +4,7 @@ using Thaiproperty.Common;
 using Thaiproperty.Models;
 using Thaiproperty.ViewModels.Project;
 
-namespace Thaiproperty.ViewModels
+namespace Thaiproperty.ViewModels.Post
 {
     public class PropertyImage
     {

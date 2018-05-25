@@ -66,12 +66,12 @@ export const actionCreators = {
   },
 };
 
-const handleErrors = (response) => {
-  // handle server response with non Ok status
-  // console.log('response=',response);
-  if (!response.ok) {
-    // throw an exception which will go into the catch exception section
-    throw Error('Server Error: ' + response.status + ' - ' + response.statusText);
-  }
-  return response;
-}
+// const handleErrors = (response) => {
+//   // handle server response with non Ok status
+//   // console.log('response=',response);
+//   if (!response.ok) {
+//     // throw an exception which will go into the catch exception section
+//     throw Error('Server Error: ' + response.status + ' - ' + response.statusText);
+//   }
+//   return response;
+// }
