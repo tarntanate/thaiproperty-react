@@ -8,7 +8,7 @@ export default props => (
   <Navbar inverse fixedTop fluid collapseOnSelect>
     <Navbar.Header>
       <Navbar.Brand>
-        <Link to={'/'}>Homepage</Link>
+        <Link to={'/'}>[Logo]</Link>
       </Navbar.Brand>
       <Navbar.Toggle />
     </Navbar.Header>
@@ -21,12 +21,12 @@ export default props => (
         </LinkContainer>
         <LinkContainer to={'/projects/map'}>
           <NavItem>
-            <Glyphicon glyph="map-marker" />Condominium Project List on Map
+            <Glyphicon glyph="map-marker" />Map
           </NavItem>
         </LinkContainer>
         <LinkContainer to={'/list/condominium'}>
           <NavItem>
-            <Glyphicon glyph="list" />คอนโด
+            <Glyphicon glyph="list" />ค้นหา
           </NavItem>
         </LinkContainer>
       </Nav>

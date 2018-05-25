@@ -11,7 +11,7 @@ import PostList from './containers/PostList';
 
 export default () => (
   <Layout>
-    <Route exact path="/" component={Home} />
+    <Route exact path="/" component={PostList} />
     <Route path="/projects/map" component={ProjectsOnMap} />
     <Route path="/list/:id" component={PostList} />
   </Layout>

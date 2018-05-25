@@ -17,6 +17,8 @@ class PostList extends Component {
     state = {
         posts: [], // store the filtered post list
         typeId: null, // category type (eg. คอนโด, บ้าน)
+        isForRent: null,
+        bedRoom: null,
         minPrice: 0,
         maxPrice: null,
         searchText: '',
@@ -56,11 +58,18 @@ class PostList extends Component {
         this.setState({ typeId, posts: filteredPosts});
     }
 
-    onBedRoomChange = (number) => {
+    onBedRoomChange = (bedRoom) => {
         const filteredPosts = this.props.posts.filter(post => {
-            return post.bedRoom == number;
+            return post.bedRoom == bedRoom;
         });
-        this.setState({ number, posts: filteredPosts});
+        this.setState({ bedRoom, posts: filteredPosts});
+    }
+
+    onForRentChange = (isForRent) => {
+        const filteredPosts = this.props.posts.filter(post => {
+            return post.isForRent == isForRent;
+        });
+        this.setState({ isForRent, posts: filteredPosts});
     }
       
     render() {
@@ -87,6 +96,12 @@ class PostList extends Component {
                         <Option value="3">ทาวน์โฮม</Option>
                         <Option value="4">คอนโดมิเนียม</Option>
                         <Option value="5">ที่ดิน</Option>
+                    </Select>
+                    <Select dropdownMatchSelectWidth={false} defaultValue="ขาย/ให้เช่า" 
+                        onChange={this.onForRentChange}
+                        style={{marginRight:10, width:150}}>
+                        <Option value="0">ขาย</Option>
+                        <Option value="1">ให้เช่า</Option>
                     </Select>
                     <Select dropdownMatchSelectWidth={false} defaultValue="จำนวนห้องนอน" 
                         onChange={this.onBedRoomChange}
