@@ -2,7 +2,8 @@
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import * as ProjectList from '../reducers/ProjectList';
+import { projectsReducer } from '../reducers/ProjectList';
+import { postsReducer } from '../reducers/PostList';
 import throttle from 'lodash/throttle';
 
 export default function configureStore(history, initialState) {
@@ -20,7 +21,8 @@ export default function configureStore(history, initialState) {
   }
 
   const reducers = {
-    projectList: ProjectList.reducer,
+    projects: projectsReducer,
+    posts: postsReducer,
   };
 
   const rootReducer = combineReducers({

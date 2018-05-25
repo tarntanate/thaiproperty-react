@@ -1,25 +1,28 @@
 import React from 'react';
+import moment from 'moment/moment';
+import 'moment/locale/th';
+import Card from 'antd/lib/card';
 
-export default ({postId, typeId, categoryText = '', title, price, forRent, postDate}) => {
+export default ({postId, typeId, categoryText = '', thumbnailUrl, title, price, forRent, postDate}) => {
     return (
-        <div className="col-xs-12 col-sm-6 col-md-4 col-md-pull-8 col-lg-2 col-lg-pull-10 property-image">
-            <a className="post" href="/post/{postId}" title={title}>
+        <Card className="postItem" style={{ marginBottom: 5}}>
+            <a href={`/post/${postId}`} title={title}>
                 <div className="img-propertylist">
                     <img 
                         className="img-propertylist" 
-                        src="/image.aspx?f=332494_Logo_12876pic1.jpg&amp;size=320x240&amp;Quality=75" 
+                        src={thumbnailUrl} 
                         alt={title}
                     />
                 </div>
             </a>
-            <span class="overlay-text hidden-sm hidden-md hidden-lg">
-                <a href="/post/{postId}" style={{color: 'white'}}>
-                    {`${forRent} ${price}`}<br />
-                    {`${forRent}${categoryText} ${price}`}
+            <span className="">
+                <a href="/post/{postId}" title={title}>
+                   {title}
                 </a>
+                {`${forRent}${categoryText} ${price}`}
                 <br />
-                <span>{postDate}</span>
+                <span>{moment(postDate).fromNow()}</span>
             </span>
-        </div>
+        </Card>
     );
 }

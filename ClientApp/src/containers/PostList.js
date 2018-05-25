@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 // import user libriers
-import { actionCreators } from '../redux/actions/ProjectList';
+import { actionCreators } from '../redux/actions/PostList';
 import { openNotification } from '../components/Shared/Notification';
 import { Spinner } from '../components/Shared/Spinner';
 import { ErrorMessage } from '../components/Shared/ErrorMessage';
 import Post from '../components/PostList/Post';
 
-const LIMIT_POSTS_FROM_API = 200;
+const LIMIT_POSTS_FROM_API = 100;
 
 class PostList extends Component {
     state = {
@@ -47,11 +47,25 @@ class PostList extends Component {
       }
       
     render() {
+        if (this.props.isLoading) {
+            return (
+              <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                กำลังโหลดข้อมูล... <br />
+                <br />
+                <Spinner />
+              </div>
+            );
+        }
+
         return (
             <div>
+                {this.props.errorMessage && (
+                    <ErrorMessage text={this.props.errorMessage} />
+                )}
                 {
                     this.state.posts.map(p => (
-                        <Post 
+                        <Post
+                            key={p.postId}
                             postId={p.postId}
                             categoryId={p.typeId}
                             title={p.title}
@@ -70,6 +84,6 @@ class PostList extends Component {
 }
 
 export default connect(
-    // map the state from redux store (projectList) into props
-    state => state.postList,
+    // map the state from redux store (postList) into props
+    state => state.posts,
     dispatch => bindActionCreators(actionCreators, dispatch))(PostList);

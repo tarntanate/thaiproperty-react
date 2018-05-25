@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store';
 // import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { actionCreators, LOAD_PROJECTS_REQUEST, LOAD_PROJECTS_ERROR } from '../../redux/actions/ProjectList';
-import { reducer } from '../../redux/reducers/ProjectList';
+import { projectsReducer } from '../../redux/reducers/ProjectList';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -31,7 +31,7 @@ describe('ProjectList Reducer', () => {
   // });
 
   it('Reducers should return error message and set isLoading to false if error occurs', () => {
-    const result = reducer(null, {type : LOAD_PROJECTS_ERROR});
+    const result = projectsReducer(null, {type : LOAD_PROJECTS_ERROR});
     expect(result.errorMessage).toBe(undefined);
     expect(result.isLoading).toBe(false);
   });

@@ -16,12 +16,17 @@ export default props => (
       <Nav>
         <LinkContainer to={'/'} exact>
           <NavItem>
-            <Glyphicon glyph="home" /> Home
+            <Glyphicon glyph="home" />หน้าแรก
           </NavItem>
         </LinkContainer>
-        <LinkContainer to={'/projectonmap'}>
+        <LinkContainer to={'/projects/map'}>
           <NavItem>
-            <Glyphicon glyph="map-marker" /> Condominium Project List on Map
+            <Glyphicon glyph="map-marker" />Condominium Project List on Map
+          </NavItem>
+        </LinkContainer>
+        <LinkContainer to={'/list/condominium'}>
+          <NavItem>
+            <Glyphicon glyph="list" />คอนโด
           </NavItem>
         </LinkContainer>
       </Nav>

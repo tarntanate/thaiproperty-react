@@ -238,5 +238,5 @@ class ProjectOnMap extends Component {
 
 export default connect(
   // map the state from redux store (projectList) into props
-  state => state.projectList,
+  state => state.projects,
   dispatch => bindActionCreators(actionCreators, dispatch))(ProjectOnMap);

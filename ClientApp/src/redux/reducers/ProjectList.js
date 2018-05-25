@@ -7,7 +7,7 @@ const initialState = {
   errorMessage: null
 };
 
-export const reducer = (state = initialState, action) => {
+export const projectsReducer = (state = initialState, action) => {
   if (!process.env) {
     // log action except under test environment
     console.debug('action.type:', action.type);
