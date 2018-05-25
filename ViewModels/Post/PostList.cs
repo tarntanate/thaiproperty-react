@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Thaiproperty.Common;
 using Thaiproperty.Models;
+using Thaiproperty.ViewModels.Project;
 
 namespace Thaiproperty.ViewModels.Post
 {
@@ -35,7 +36,7 @@ namespace Thaiproperty.ViewModels.Post
         public string ContactName { get; set; }
         public int? ProjectId { get; set; }
         public Member Member { get; set; }
-        public NewProject Project { get; set; }
+        public ProjectListViewModel Project { get; set; }
         public District District { get; set; }
         public Province Province { get; set; }
         public PropertyType Type { get; set; }

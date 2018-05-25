@@ -29,83 +29,90 @@ namespace Thaiproperty.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{limit?}")] // /api/posts
-        public IActionResult Get(int limit = _defaultLimit)
+        [HttpGet] // /api/posts
+        public async Task<IActionResult> GetAll(int limit = _defaultLimit, [FromQuery] int type = 0)
         {
-            var result = _postRepository.GetPostList()
-                .OrderByDescending(post => post.PostId)
-                .Take(limit);
+            var result = _postRepository.GetPostList();
+
+            if (type > 0)
+                result = result.Where(p => p.TypeId == type);
+            
             if (result == null)
             {
                 // HttpContext.Response.StatusCode = StatusCodes.Status204NoContent;
                 return NotFound();
             }
-            return Json(result.ToList());
+
+            result = result
+                .OrderByDescending(post => post.PostId)
+                .Take(limit);
+            return Json(await result.ToListAsync());
         }
 
         [HttpGet("{PostID}")] // /api/posts/212345
         public async Task<IActionResult> GetPost(int PostID)
         {
             var result = await _dbContext.PropPost
-              .AsNoTracking()
-              .Include(p => p.PropOption)
-              .Include(p => p.PropImages)
-              .Include(p => p.PropPlaces)
-              .Include(p => p.Project)
-              .Select(p => new PostDetail
-              {
-                  PostId = p.PostId,
-                  Title = p.Title,
-                  IsForRent = p.ForRent,
-                  TotalView = p.TotalView,
-                  Type = p.Type,
-                  Area = p.Area,
-                  AreaUnit = p.AreaUnit,
-                  Floor = p.Floor,
-                  BathRoom = p.BathRoom,
-                  BedRoom = p.BedRoom,
-                  Province = p.Province,
-                  District = p.District,
-                  Price = p.Price,
-                  Deposit = p.Deposit,
-                  PostDate = p.PostDate,
-                  ExpireDate = p.ExpireDate,
-                  SponsorExpireDate = p.SponsorExpireDate,
-                  ContactName = p.ContactName,
-                  EmailAddress = p.EmailAddress,
-                  Telephone = p.Telephone,
-                  MemberId = p.MemberId,
-                  LogoImageFile = p.LogoImageFile,
-                  Details = p.Details,
-                  IPCreator = p.Ipaddress,
-                  PropOption = p.PropOption,
-                  ForRentText = p.ForRent ? "ให้เช่า" : "ขาย",
-                  PropImages = p.PropImages.Select(image => new PropertyImage()
-                  {
-                      ImageId = image.ImageId,
-                      ImageFileName = image.ImageFileName,
-                  }).ToList(),
-                  PropPlaces = p.PropPlaces.Select(place => new PropertyPlace()
-                  {
-                      PlaceId = place.PlaceId,
-                      PlaceName = _dbContext.Place.FirstOrDefault(_p => _p.PlaceId == place.PlaceId).PlaceNameTh
-                  }).ToList(),
-                  Comments = p.Comments,
-                  Location = new Location
-                  {
-                      Lat = p.LocationX,
-                      Lng = p.LocationY
-                  },
-                  Project = new ProjectListViewModel
-                  {
-                      ProjectId = p.Project.ProjectId,
-                      ProjectName = p.Project.ProjectName,
-                      ProjectNameEn = p.Project.ProjectNameEn,
-                      // ProjectImageUrl = p.Project.ProjectImageUrl,
-                      CompanyId = p.Project.CompanyId
-                  },
-              })
-              .SingleOrDefaultAsync(post => post.PostId == PostID);
+                .AsNoTracking()
+                .Include(p => p.PropOption)
+                .Include(p => p.PropImages)
+                .Include(p => p.PropPlaces)
+                .Include(p => p.Project)
+                .Select(p => new PostDetail
+                {
+                PostId = p.PostId,
+                Title = p.Title,
+                IsForRent = p.ForRent,
+                TotalView = p.TotalView,
+                Type = p.Type,
+                Area = p.Area,
+                AreaUnit = p.AreaUnit,
+                Floor = p.Floor,
+                BathRoom = p.BathRoom,
+                BedRoom = p.BedRoom,
+                Province = p.Province,
+                District = p.District,
+                Price = p.Price,
+                Deposit = p.Deposit,
+                PostDate = p.PostDate,
+                ExpireDate = p.ExpireDate,
+                SponsorExpireDate = p.SponsorExpireDate,
+                ContactName = p.ContactName,
+                EmailAddress = p.EmailAddress,
+                Telephone = p.Telephone,
+                MemberId = p.MemberId,
+                LogoImageFile = p.LogoImageFile,
+                Details = p.Details,
+                IPCreator = p.Ipaddress,
+                PropOption = p.PropOption,
+                ForRentText = p.ForRent ? "ให้เช่า" : "ขาย",
+                PropImages = p.PropImages.Select(image => new PropertyImage()
+                {
+                    ImageId = image.ImageId,
+                    ImageFileName = image.ImageFileName,
+                }).ToList(),
+                PropPlaces = p.PropPlaces.Select(place => new PropertyPlace()
+                {
+                    PlaceId = place.PlaceId,
+                    PlaceName = _dbContext.Place.FirstOrDefault(_p => _p.PlaceId == place.PlaceId).PlaceNameTh
+                }).ToList(),
+                Comments = p.Comments,
+                Location = new Location
+                {
+                    Lat = p.LocationX,
+                    Lng = p.LocationY
+                },
+                Project = new ProjectListViewModel
+                {
+                    ProjectId = p.Project.ProjectId,
+                    ProjectName = p.Project.ProjectName,
+                    ProjectNameEn = p.Project.ProjectNameEn,
+                    // ProjectImageUrl = p.Project.ProjectImageUrl,
+                    CompanyId = p.Project.CompanyId
+                },
+                })
+                .SingleOrDefaultAsync(post => post.PostId == PostID);
+
             if (result == null)
             {
                 // HttpContext.Response.StatusCode = StatusCodes.Status204NoContent;
