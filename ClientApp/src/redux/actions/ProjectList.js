@@ -1,4 +1,4 @@
-import { getApiServerUrl } from '../../config.js';
+import { getApiServerUrl, ConsoleColor } from '../../config.js';
 
 // action types
 export const LOAD_PROJECTS_REQUEST = 'LOAD_PROJECTS_REQUEST';
@@ -9,8 +9,8 @@ export const LOAD_PROJECTS_ERROR = 'LOAD_PROJECTS_ERROR';
 export const actionCreators = {
   // 'requestProjectList' is a thunk action creator which is a function that returns a function (require thunk middleware)
   // it is the same as return (dispatch, getState) => {}
-  requestProjectList: limitResult => async (dispatch, getState) => {
-    if (limitResult === 0) {
+  requestProjectList: limit => async (dispatch, getState) => {
+    if (limit === 0) {
       // useless to call API, so just don't dispatch action
       return;
     }
@@ -18,11 +18,11 @@ export const actionCreators = {
       type: LOAD_PROJECTS_REQUEST
     });
 
-    let apiUrl = `${getApiServerUrl()}/Project/GetAllProjectsWithAvgPrice`;
-    if (limitResult) {
-      apiUrl = apiUrl + `?limitResult=${limitResult}`;
+    let apiUrl = `${getApiServerUrl()}/projects/withAvgPrice`;
+    if (limit) {
+      apiUrl = apiUrl + `?limit=${limit}`;
     }
-    console.debug(`%c Requesting API: ${apiUrl}`,'color: #3366aa; font-weight: bold');
+    console.debug(`%c Requesting API: ${apiUrl}`, ConsoleColor.REQUEST);
     
     try {
       const response = await fetch(apiUrl);

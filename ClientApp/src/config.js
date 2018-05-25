@@ -26,3 +26,9 @@ export const getApiServerUrl = () => {
       return API_BASE_URL_PROD;
     }
 }
+
+export class ConsoleColor 
+{
+    static REQUEST = 'background:#3366aa; color: #ffffff; font-weight: bold';
+    static RESPONSE = 'background:#33aa66; color: #ffffff; font-weight: bold';
+}

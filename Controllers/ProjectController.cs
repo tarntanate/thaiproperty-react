@@ -39,9 +39,9 @@ namespace Thaiproperty.Controllers
             return Json(result);
         }
 
-        [HttpGet("GetWithAvgPrice/{limit?}")]
+        [HttpGet("WithAvgPrice/{limit?}")]
         [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Any, NoStore = false)]
-        public IActionResult GetWithAvgPrice(int limit = _defaultLimit)
+        public IActionResult WithAvgPrice(int limit = _defaultLimit)
         {
             var result = _projectRepository.GetProjectListWithAvgPrice()
                 .Where(p => p.TotalPost > 0 

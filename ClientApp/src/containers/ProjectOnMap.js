@@ -16,7 +16,7 @@ import { GOOGLE_MAP_DEFAULT_CENTER } from '../config.js';
 const MAX_PROJECT_AVG_PRICE_PER_SQM = 350000;
 const SLIDER_AVG_PRICE_STEP = 10000;
 const LIMIT_PROJECTS_SHOW_ON_MAP = 150; // for performance reason of Google Map on rendering too many markers
-const LIMIT_PROJECTS_FROM_API = 150; // too much results will increase in API loading time and more memory usage
+const LIMIT_PROJECTS_FROM_API = 100; // too much results will increase in API loading time and more memory usage
 
 class ProjectOnMap extends Component {
   state = {
