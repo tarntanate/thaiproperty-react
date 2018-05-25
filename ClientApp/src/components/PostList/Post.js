@@ -3,9 +3,18 @@ import moment from 'moment/moment';
 import 'moment/locale/th';
 import Card from 'antd/lib/card';
 
-export default ({postId, typeId, categoryText = '', thumbnailUrl, title, price, forRent, postDate}) => {
+export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent, postDate, ...props}) => {
+    let sellingText = forRent ? 'ให้เช่า' : 'ขาย';
+    let price = props.price.toLocaleString('thai', { style: 'decimal', minimumFractionDigits: 0 });
+
     return (
-        <Card className="postItem" style={{ marginBottom: 5}}>
+        <Card className="postItem" style={{ marginBottom: 5}} hoverable>
+            <a className="postTitle" 
+                href={`/post/${postId}`} 
+                title={title} 
+                style={{ fontWeight: 'bold', fontSize: '1.5rem'}}>
+                {title}
+            </a>
             <a href={`/post/${postId}`} title={title}>
                 <div className="img-propertylist">
                     <img 
@@ -16,12 +25,10 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, price, 
                 </div>
             </a>
             <span className="">
-                <a href="/post/{postId}" title={title}>
-                   {title}
-                </a>
-                {`${forRent}${categoryText} ${price}`}
+                
+                {`${sellingText} ${price}`}
                 <br />
-                <span>{moment(postDate).fromNow()}</span>
+                <span>เมื่อ {moment(postDate).fromNow()}</span>
             </span>
         </Card>
     );

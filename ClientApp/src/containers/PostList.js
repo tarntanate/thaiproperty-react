@@ -9,7 +9,7 @@ import { Spinner } from '../components/Shared/Spinner';
 import { ErrorMessage } from '../components/Shared/ErrorMessage';
 import Post from '../components/PostList/Post';
 
-const LIMIT_POSTS_FROM_API = 100;
+const LIMIT_POSTS_FROM_API = 50;
 
 class PostList extends Component {
     state = {
