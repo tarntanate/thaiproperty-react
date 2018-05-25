@@ -19,15 +19,15 @@ const LIMIT_PROJECTS_SHOW_ON_MAP = 150; // for performance reason of Google Map 
 const LIMIT_PROJECTS_FROM_API = 100; // too much results will increase in API loading time and more memory usage
 
 class ProjectOnMap extends Component {
-  state = {
-    projectList: [], // store the filtered projects list
-    currentLocation: GOOGLE_MAP_DEFAULT_CENTER, // init default map position, then get from geolocation api later if user is allow
-    minAvgPrice: 0,
-    maxAvgPrice: MAX_PROJECT_AVG_PRICE_PER_SQM,
-    searchText: '',
-    isLoading: false, // this is local loading from search filter or sliding price limit
-    showInitialMessage: true, // this option use to show notification on initial page load
-  };
+    state = {
+        projectList: [], // store the filtered projects list
+        currentLocation: GOOGLE_MAP_DEFAULT_CENTER, // init default map position, then get from geolocation api later if user is allow
+        minAvgPrice: 0,
+        maxAvgPrice: MAX_PROJECT_AVG_PRICE_PER_SQM,
+        searchText: '',
+        isLoading: false, // this is local loading from search filter or sliding price limit
+        showInitialMessage: true, // this option use to show notification on initial page load
+    };
 
   componentDidMount() {
     // call redux action creator
