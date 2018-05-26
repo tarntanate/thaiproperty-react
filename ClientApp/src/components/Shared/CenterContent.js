@@ -1,13 +1,13 @@
 import React from 'react';
-import { Panel } from 'react-bootstrap';
+import { Card, CardBody } from 'reactstrap';
 
 const MARGIN_TOP = '20px';
 
 export const CenterContent = props => {
   if (props.usePanel) {
     return (
-      <Panel onClick={props.handlePanelClick} style={{ marginTop: MARGIN_TOP }}>
-        <Panel.Body
+      <Card onClick={props.handlePanelClick} style={{ marginTop: MARGIN_TOP }}>
+        <CardBody
           style={{
             width: '100%',
             textAlign: 'center',
@@ -15,8 +15,8 @@ export const CenterContent = props => {
           }}
         >
           {props.children}
-        </Panel.Body>
-      </Panel>
+        </CardBody>
+      </Card>
     );
   } else {
     return (

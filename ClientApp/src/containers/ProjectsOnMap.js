@@ -130,7 +130,7 @@ class ProjectOnMap extends Component {
     );
     console.debug('filteredProject=', filteredProjects);
 
-    this.setProjectListToStateWithLimitResult(filteredProjects, LIMIT_PROJECTS_SHOW_ON_MAP);
+    this.setState({ projectList: filteredProjects });
   };
 
   onPriceFilterChanged = value => {
@@ -182,19 +182,20 @@ class ProjectOnMap extends Component {
     }
 
     return (
-      <div style={{ margin: '5px' }}>
+      <div style={{ margin: '2px', marginTop: '10px' }}>
         {this.props.errorMessage && (
           <ErrorMessage text={this.props.errorMessage} />
         )}
         {!this.props.errorMessage && (
-          <div style={{ marginLeft: '20px', marginRight: '20px' }}>
-            <h3 className="h4">กรองการค้นหาจากชื่อโครงการ หรือช่วงราคาต่อตารางเมตร</h3>
+          <div style={{ marginLeft: '10px', marginRight: '10px' }}>
+            <h4 className="h5">กรองการค้นหาจากชื่อโครงการ หรือช่วงราคาต่อตารางเมตร</h4>
             <div>
               <Input
                 type="text"
                 size="large"
                 placeholder="ใส่ชื่อโครงการที่ต้องการค้นหา"
                 value={this.state.searchText}
+                style={{ maxWidth: 300 }}
                 onChange={e => this.setState({ searchText: e.target.value })}
                 onPressEnter={e => this.onProjectNameSearch(e)}
               />

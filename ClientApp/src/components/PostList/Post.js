@@ -2,35 +2,41 @@ import React from 'react';
 import moment from 'moment/moment';
 import 'moment/locale/th';
 import Card from 'antd/lib/card';
+import { Icon } from 'react-fa';
 
 export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent, project, postDate, ...props}) => {
     let sellingText = forRent ? 'ให้เช่า' : 'ขาย';
     let price = props.price.toLocaleString('thai', { style: 'decimal', minimumFractionDigits: 0 });
+    let altenateCss = props.index % 2 ? 'altenate-item' : '';
 
     return (
-        <Card className="postItem" style={{ marginBottom: 5}} hoverable>
+        <Card className={altenateCss} bodyStyle={{ padding: 10 }} hoverable
+            style={{ marginBottom: 5, cursor: 'default'}}>
             <a className="postTitle" 
                 href={`/post/${postId}`} 
                 title={title} 
-                style={{ fontWeight: 'bold', fontSize: '1.5rem'}}>
+                style={{ fontWeight: 'bold', fontSize: '1.2em'}}>
                 {title}
             </a>
-            <a href={`/post/${postId}`} title={title}>
-                <div className="img-propertylist">
+            <div>
+                <a href={`/post/${postId}`} title={title}>
                     <img 
-                        className="img-propertylist" 
+                        className="img-propertylist"
+                        style={{ maxWidth: 200, height: 'auto'}}
                         src={thumbnailUrl} 
                         alt={title}
                     />
-                </div>
-            </a>
+                </a>
+            </div>
             <span className="">
-                
-                {`${sellingText} ${price}`}
+                {props.bedRoom} <Icon name="bed" fixedWidth />
+                {props.bathRoom} <Icon name="bath" fixedWidth />
+                {sellingText} 
+                {price}
                 <br />
-                <span>เมื่อ {moment(postDate).fromNow()}</span>
+                <span><Icon name="clock-o" fixedWidth className="text-muted" />{moment(postDate).fromNow()}</span>
                 {project && 
-                    <div><a href={`/project/${project.projectId}`}>{project.projectName}</a></div>}
+                    <div><Icon name="map-marker" fixedWidth className="text-muted" /><a href={`/project/${project.projectId}`}>{project.projectName}</a></div>}
             </span>
         </Card>
     );
