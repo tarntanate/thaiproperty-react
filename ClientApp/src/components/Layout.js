@@ -5,17 +5,15 @@ import NavMenu from './NavMenu';
 import { PageFooter } from './Footer';
 
 export default props => (
-    <Container fluid>
-        <Row>
-            <div style={{width:'100%'}}>
-                <NavMenu />
-            </div>
-        </Row>
-        <Row>
-            <Col style={{ paddingLeft: '4px', paddingRight: '4px' }}>
-                {props.children}
-                <PageFooter />
-            </Col>
-        </Row>
-    </Container>
+    <div>
+        <NavMenu />
+        <Container>
+            <Row>
+                <Col style={{ paddingLeft: '4px', paddingRight: '4px' }}>
+                    {props.children}
+                    <PageFooter />
+                </Col>
+            </Row>
+        </Container>
+    </div>
 );

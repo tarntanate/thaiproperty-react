@@ -36,13 +36,13 @@ export default class NavMenu extends React.Component {
                 <Collapse isOpen={this.state.isOpen} navbar>
                     <Nav className="ml-auto" navbar>
                         <NavItem>
-                            <NavLink href="/"><Icon name="home" /> Home</NavLink>
+                            <NavLink className="text-light" href="/"><Icon name="home" /> Home</NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href="/projects/map"><Icon name="map-marker" /> Map</NavLink>
+                            <NavLink className="text-light" href="/projects/map"><Icon name="map-marker" /> Map</NavLink>
                         </NavItem>
                         <UncontrolledDropdown nav inNavbar>
-                            <DropdownToggle nav caret>
+                            <DropdownToggle className="text-light" nav caret>
                                 <Icon name="search" /> Search
                             </DropdownToggle>
                             <DropdownMenu right>

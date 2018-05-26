@@ -9,6 +9,7 @@ import { openNotification } from '../components/Shared/Notification';
 import { Spinner } from '../components/Shared/Spinner';
 import { ErrorMessage } from '../components/Shared/ErrorMessage';
 import Post from '../components/PostList/Post';
+import { districtData } from '../components/Distict/Data';
 // import { CenterContent } from '../components/Shared/CenterContent';
 
 const LIMIT_POSTS_FROM_API = 100;
@@ -20,6 +21,7 @@ class PostList extends Component {
         typeId: null, // category type (eg. คอนโด, บ้าน)
         isForRent: null,
         bedRoom: null,
+        district: [], // array of districtId
         minPrice: 0,
         maxPrice: null,
         searchText: '',
@@ -53,36 +55,59 @@ class PostList extends Component {
     }
 
     onPostTypeChange = (typeId) => {
+        typeId = Number(typeId);
         const options = {
-            typeId: Number(typeId),
+            typeId,
             isForRent: this.state.isForRent,
             bedRoom: this.state.bedRoom,
+            district: this.state.district,
         }
         const posts = this.filteredPosts(this.props.posts, options);
-        this.setState({ typeId, posts: posts});
+        this.setState({ typeId, posts});
+    }
+
+    onDistrictChange = (district = []) => {
+        const arrDistrict = district.map(d => Number(d)); // Convert to array of int
+        const options = {
+            typeId: this.state.typeId,
+            isForRent: this.state.isForRent,
+            bedRoom: this.state.bedRoom,
+            district: arrDistrict,
+        }
+        const posts = this.filteredPosts(this.props.posts, options);
+        this.setState({ district: arrDistrict, posts});
     }
 
     onBedRoomChange = (bedRoom) => {
+        if (!bedRoom) { 
+            bedRoom = null;
+        } else {
+            bedRoom = Number(bedRoom);
+        }
+
         const options = {
             typeId: this.state.typeId,
             isForRent: this.state.isForRent,
-            bedRoom: Number(bedRoom),
+            bedRoom,
+            district: this.state.district,
         }
         const posts = this.filteredPosts(this.props.posts, options);
-        this.setState({ bedRoom, posts: posts});
+        this.setState({ bedRoom, posts });
     }
 
     onForRentChange = (isForRent) => {
+        isForRent = Boolean(Number(isForRent));
         const options = {
             typeId: this.state.typeId,
-            isForRent: Boolean(Number(isForRent)),
+            isForRent,
             bedRoom: this.state.bedRoom,
+            district: this.state.district,
         }
         const posts = this.filteredPosts(this.props.posts, options);
         this.setState({ isForRent, posts });
     }
 
-    filteredPosts = (posts, { typeId, isForRent, bedRoom }) => {
+    filteredPosts = (posts, { typeId, isForRent, bedRoom, district = [] }) => {
         let filtered;
         if (typeId != null) {
             filtered = posts.filter(post => post.typeId === Number(typeId));
@@ -96,6 +121,11 @@ class PostList extends Component {
 
         if (bedRoom != null) {
             filtered = filtered.filter(post => post.bedRoom === Number(bedRoom));
+        }
+
+        if (district.length > 0) {
+            console.log(district);
+            filtered = filtered.filter(post =>  district.includes(post.district.districtId) )
         }
 
         return filtered;
@@ -117,28 +147,40 @@ class PostList extends Component {
                 {this.props.errorMessage && (
                     <ErrorMessage text={this.props.errorMessage} />
                 )}
-                <div style={{ margin: 10 }}>
-                    <Select size="large" dropdownMatchSelectWidth={false} defaultValue="เลือกประเภท"
+                <div className="control-zone" >
+                    <Select size="large" dropdownMatchSelectWidth={false} placeholder="เลือกประเภท"
                         onChange={this.onPostTypeChange} 
-                        style={{marginRight:10, width:150}}>
+                        className="dropdown">
                         <Option value="2">บ้านเดี่ยว</Option>
                         <Option value="3">ทาวน์โฮม</Option>
                         <Option value="4">คอนโดมิเนียม</Option>
                         <Option value="5">ที่ดิน</Option>
                     </Select>
-                    <Select size="large" dropdownMatchSelectWidth={false} defaultValue="ขาย/ให้เช่า" 
+                    <Select size="large" dropdownMatchSelectWidth={false} placeholder="ขาย/ให้เช่า" 
                         onChange={this.onForRentChange}
-                        style={{marginRight:10, width:150}}>
+                        className="dropdown">
                         <Option value="0">ขาย</Option>
                         <Option value="1">ให้เช่า</Option>
                     </Select>
-                    <Select size="large" dropdownMatchSelectWidth={false} defaultValue="จำนวนห้องนอน" 
+                    <Select size="large" dropdownMatchSelectWidth={false} placeholder="จำนวนห้องนอน" 
                         onChange={this.onBedRoomChange}
-                        style={{marginRight:10, width:150}}>
+                        className="dropdown" style={{minWidth:150}}>
+                        <Option value="">ไม่ระบุ</Option>
+                        <Option value="0">ห้องสตูดิโอ</Option>
                         <Option value="1">1 ห้องนอน</Option>
                         <Option value="2">2 ห้องนอน</Option>
                         <Option value="3">3 ห้องนอน</Option>
                         <Option value="4">4 ห้องนอน</Option>
+                    </Select>
+                    <Select
+                        mode="multiple" size="large"
+                        onChange={this.onDistrictChange}
+                        className="dropdown"
+                        placeholder="เลือกเขต"
+                        >
+                        {districtData.map(d => (
+                            <Option key={d.id} value={d.id}>{d.name}</Option>
+                        ))}
                     </Select>
                 </div>
                 {this.state.posts.map((p, index) => (
@@ -157,7 +199,8 @@ class PostList extends Component {
                         bedRoom={p.bedRoom}
                         bathRoom={p.bathRoom}
                         area={p.area}
-                        areaUnit={p.areaUnit}>
+                        areaUnit={p.areaUnit}
+                        district={p.district}>
                     </Post>
                 ))}
             </div>

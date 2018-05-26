@@ -4,7 +4,7 @@ import 'moment/locale/th';
 import Card from 'antd/lib/card';
 import { Icon } from 'react-fa';
 
-export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent, project, postDate, ...props}) => {
+export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent, project, postDate, district, ...props}) => {
     let sellingText = forRent ? 'ให้เช่า' : 'ขาย';
     let price = props.price.toLocaleString('thai', { style: 'decimal', minimumFractionDigits: 0 });
     let altenateCss = props.index % 2 ? 'altenate-item' : '';
@@ -12,7 +12,7 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
     return (
         <Card className={altenateCss} bodyStyle={{ padding: 10 }} hoverable
             style={{ marginBottom: 5, cursor: 'default'}}>
-            <a className="postTitle" 
+            <a className="text-secondary" 
                 href={`/post/${postId}`} 
                 title={title} 
                 style={{ fontWeight: 'bold', fontSize: '1.2em'}}>
@@ -29,14 +29,23 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
                 </a>
             </div>
             <span className="">
-                {props.bedRoom} <Icon name="bed" fixedWidth />
-                {props.bathRoom} <Icon name="bath" fixedWidth />
-                {sellingText} 
-                {price}
+                {`${sellingText} ${price}`} - 
+                <span style={{ marginLeft:5 }}> 
+                    {props.bedRoom} <Icon name="bed" fixedWidth style={{ marginRight: 10 }}/>
+                    {props.bathRoom} <Icon name="bath" fixedWidth style={{ marginRight: 10 }}/>
+                </span>
                 <br />
-                <span><Icon name="clock-o" fixedWidth className="text-muted" />{moment(postDate).fromNow()}</span>
+                <div className="text-muted">
+                    <Icon name="clock-o" fixedWidth />{moment(postDate).fromNow()}
+                </div>
+                <div className="text-muted">
+                    <Icon name="marker" fixedWidth />เขต{district.districtName}
+                </div>
                 {project && 
-                    <div><Icon name="map-marker" fixedWidth className="text-muted" /><a href={`/project/${project.projectId}`}>{project.projectName}</a></div>}
+                    <div>
+                        <Icon name="map-marker" fixedWidth  />
+                        <a href={`/project/${project.projectId}`}>{project.projectName}</a>
+                    </div>}
             </span>
         </Card>
     );

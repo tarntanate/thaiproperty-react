@@ -1,0 +1,285 @@
+export const districtData = [{
+    "id": 1,
+    "name": "(ไม่ระบุ)/ตจว.",
+    "provinceId": 1
+}, {
+    "id": 2,
+    "name": "คลองเตย",
+    "provinceId": 1
+}, {
+    "id": 3,
+    "name": "คลองสาน",
+    "provinceId": 1
+}, {
+    "id": 4,
+    "name": "คลองสามวา",
+    "provinceId": 1
+}, {
+    "id": 5,
+    "name": "คันนายาว",
+    "provinceId": 1
+}, {
+    "id": 6,
+    "name": "จตุจักร",
+    "provinceId": 1
+}, {
+    "id": 7,
+    "name": "จอมทอง",
+    "provinceId": 1
+}, {
+    "id": 8,
+    "name": "ดอนเมือง",
+    "provinceId": 1
+}, {
+    "id": 9,
+    "name": "ดินแดง",
+    "provinceId": 1
+}, {
+    "id": 10,
+    "name": "ดุสิต",
+    "provinceId": 1
+}, {
+    "id": 11,
+    "name": "ตลิ่งชัน",
+    "provinceId": 1
+}, {
+    "id": 12,
+    "name": "ทวีวัฒนา",
+    "provinceId": 1
+}, {
+    "id": 13,
+    "name": "ทุ่งครุ",
+    "provinceId": 1
+}, {
+    "id": 14,
+    "name": "ธนบุรี",
+    "provinceId": 1
+}, {
+    "id": 15,
+    "name": "บางกอกน้อย",
+    "provinceId": 1
+}, {
+    "id": 16,
+    "name": "บางกอกใหญ่",
+    "provinceId": 1
+}, {
+    "id": 17,
+    "name": "บางกะปิ",
+    "provinceId": 1
+}, {
+    "id": 18,
+    "name": "บางขุนเทียน",
+    "provinceId": 1
+}, {
+    "id": 19,
+    "name": "บางเขน",
+    "provinceId": 1
+}, {
+    "id": 20,
+    "name": "บางคอแหลม",
+    "provinceId": 1
+}, {
+    "id": 21,
+    "name": "บางแค",
+    "provinceId": 1
+}, {
+    "id": 22,
+    "name": "บางซื่อ",
+    "provinceId": 1
+}, {
+    "id": 23,
+    "name": "บางนา",
+    "provinceId": 1
+}, {
+    "id": 24,
+    "name": "บางบอน",
+    "provinceId": 1
+}, {
+    "id": 25,
+    "name": "บางพลัด",
+    "provinceId": 1
+}, {
+    "id": 26,
+    "name": "บางรัก",
+    "provinceId": 1
+}, {
+    "id": 27,
+    "name": "บึงกุ่ม",
+    "provinceId": 1
+}, {
+    "id": 28,
+    "name": "ปทุมวัน",
+    "provinceId": 1
+}, {
+    "id": 29,
+    "name": "ประเวศ",
+    "provinceId": 1
+}, {
+    "id": 30,
+    "name": "ป้อมปราบศัตรูพ่าย",
+    "provinceId": 1
+}, {
+    "id": 31,
+    "name": "พญาไท",
+    "provinceId": 1
+}, {
+    "id": 32,
+    "name": "พระโขนง",
+    "provinceId": 1
+}, {
+    "id": 33,
+    "name": "พระนคร",
+    "provinceId": 1
+}, {
+    "id": 34,
+    "name": "ภาษีเจริญ",
+    "provinceId": 1
+}, {
+    "id": 35,
+    "name": "มีนบุรี",
+    "provinceId": 1
+}, {
+    "id": 36,
+    "name": "ยานนาวา",
+    "provinceId": 1
+}, {
+    "id": 37,
+    "name": "ราชเทวี",
+    "provinceId": 1
+}, {
+    "id": 38,
+    "name": "ราษฎร์บูรณะ",
+    "provinceId": 1
+}, {
+    "id": 39,
+    "name": "ลาดกระบัง",
+    "provinceId": 1
+}, {
+    "id": 40,
+    "name": "ลาดพร้าว",
+    "provinceId": 1
+}, {
+    "id": 41,
+    "name": "วังทองหลาง",
+    "provinceId": 1
+}, {
+    "id": 42,
+    "name": "วัฒนา",
+    "provinceId": 1
+}, {
+    "id": 43,
+    "name": "สนท.กลาง",
+    "provinceId": 1
+}, {
+    "id": 44,
+    "name": "สวนหลวง",
+    "provinceId": 1
+}, {
+    "id": 45,
+    "name": "สะพานสูง",
+    "provinceId": 1
+}, {
+    "id": 46,
+    "name": "สัมพันธวงศ์",
+    "provinceId": 1
+}, {
+    "id": 47,
+    "name": "สาทร",
+    "provinceId": 1
+}, {
+    "id": 48,
+    "name": "สายไหม",
+    "provinceId": 1
+}, {
+    "id": 49,
+    "name": "หนองแขม",
+    "provinceId": 1
+}, {
+    "id": 50,
+    "name": "หนองจอก",
+    "provinceId": 1
+}, {
+    "id": 51,
+    "name": "หลักสี่",
+    "provinceId": 1
+}, {
+    "id": 52,
+    "name": "ห้วยขวาง",
+    "provinceId": 1
+}, {
+    "id": 53,
+    "name": "รังสิต",
+    "provinceId": 1
+}, {
+    "id": 60,
+    "name": "พัทยาเหนือ",
+    "provinceId": 9
+}, {
+    "id": 61,
+    "name": "พัทยากลาง",
+    "provinceId": 9
+}, {
+    "id": 62,
+    "name": "พัทยาใต้",
+    "provinceId": 9
+}, {
+    "id": 63,
+    "name": "จอมเทียน",
+    "provinceId": 9
+}, {
+    "id": 64,
+    "name": "นาเกลือ",
+    "provinceId": 9
+}, {
+    "id": 201,
+    "name": "บางกรวย",
+    "provinceId": 24
+}, {
+    "id": 202,
+    "name": "บางใหญ่",
+    "provinceId": 24
+}, {
+    "id": 203,
+    "name": "บางบัวทอง",
+    "provinceId": 24
+}, {
+    "id": 204,
+    "name": "ไทรน้อย",
+    "provinceId": 24
+}, {
+    "id": 205,
+    "name": "ปากเกร็ด",
+    "provinceId": 24
+}, {
+    "id": 206,
+    "name": "อำเภอเมืองนนทบุรี",
+    "provinceId": 24
+}, {
+    "id": 207,
+    "name": "บางละมุง",
+    "provinceId": 9
+}, {
+    "id": 208,
+    "name": "ศรีราชา",
+    "provinceId": 9
+}, {
+    "id": 209,
+    "name": "พนัสนิคม",
+    "provinceId": 9
+}, {
+    "id": 210,
+    "name": "อำเภอเมืองชลบุรี",
+    "provinceId": 9
+}, {
+    "id": 211,
+    "name": "ธัญบุรี",
+    "provinceId": 28
+}, {
+    "id": 212,
+    "name": "ลำลูกกา",
+    "provinceId": 28
+}, {
+    "id": 213,
+    "name": "บางพลี",
+    "provinceId": 58
+}]
