@@ -21,11 +21,11 @@ const store = configureStore(browserHistory, initialState);
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={browserHistory}>
-      <App />
-    </ConnectedRouter>
-  </Provider>,
-  rootElement);
+    <Provider store={store}>
+        <ConnectedRouter history={browserHistory}>
+            <App />
+        </ConnectedRouter>
+    </Provider>,
+    rootElement);
 
 registerServiceWorker();

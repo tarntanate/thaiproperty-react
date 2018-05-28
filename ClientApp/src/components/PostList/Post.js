@@ -3,6 +3,7 @@ import moment from 'moment/moment';
 import 'moment/locale/th';
 import Card from 'antd/lib/card';
 import { Icon } from 'react-fa';
+import LazyLoad from 'react-lazyload';
 
 export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent, project, postDate, district, ...props}) => {
     let sellingText = forRent ? 'ให้เช่า' : 'ขาย';
@@ -20,12 +21,14 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
             </a>
             <div>
                 <a href={`/post/${postId}`} title={title}>
-                    <img 
-                        className="img-propertylist"
-                        style={{ maxWidth: 200, height: 'auto'}}
-                        src={thumbnailUrl} 
-                        alt={title}
-                    />
+                    <LazyLoad width={200} height={150} offset={200}>
+                        <img 
+                            className="img-propertylist"
+                            style={{ maxWidth: 200, height: 'auto'}}
+                            src={thumbnailUrl} 
+                            alt={title}
+                        />
+                    </LazyLoad>
                 </a>
             </div>
             <span className="">
@@ -36,7 +39,7 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
                 </span>
                 <br />
                 <div className="text-muted">
-                    <Icon name="clock-o" fixedWidth />{moment(postDate).fromNow()}
+                    <Icon name="clock-o" fixedWidth />{moment(postDate).fromNow()} ({moment(postDate).toString()})
                 </div>
                 <div className="text-muted">
                     <Icon name="marker" fixedWidth />เขต{district.districtName}

@@ -17,7 +17,7 @@ export default function configureStore(history, initialState) {
   // Configure Redux middlewares
   const middleware = [thunk, routerMiddleware(history)];
   if (isDevelopment) {
-    middleware.push(logger);
+      // middleware.push(logger);
   }
 
   const reducers = {

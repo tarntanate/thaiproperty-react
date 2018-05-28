@@ -5,16 +5,22 @@
     }
 } */
 
+body {
+    /* provides margin for fixed-top navbar */
+    margin-top: 60px;
+}
+
 div.control-zone {
     margin-top: 10px;
     margin-bottom: 10px;
     display: flex;
+    flex-wrap: wrap;
 }
 
 div.dropdown {
     margin-bottom: 10px;
     margin-right: 10px;
-    min-width: 120px;
+    min-width: 150px;
 }
 
 .altenate-item {
@@ -28,7 +34,7 @@ div.dropdown {
     div.control-zone {
         justify-content: space-between;
         padding: 5px;
-        flex-wrap: wrap;
+        
         flex-direction: column;
         flex-flow: column;
     }
@@ -37,7 +43,7 @@ div.dropdown {
 /* For viewport SM+ */
 @media (min-width: 576px) {
     div.control-zone {
-        max-width: 600px;
+        /* max-width: 600px; */
         /* justify-content: space-between; */
     }
 }

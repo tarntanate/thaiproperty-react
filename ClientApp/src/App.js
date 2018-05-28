@@ -1,5 +1,6 @@
 ﻿import React from 'react';
-import { Route } from 'react-router';
+// import { Route } from 'react-router';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 
 // Components
 import Layout from './components/Layout';
@@ -9,10 +10,12 @@ import Home from './containers/Home';
 import ProjectsOnMap from './containers/ProjectsOnMap';
 import PostList from './containers/PostList';
 
-export default () => (
-  <Layout>
-    <Route exact path="/" component={PostList} />
-    <Route path="/projects/map" component={ProjectsOnMap} />
-    <Route path="/list/:id" component={PostList} />
-  </Layout>
+export default (props) => (
+    <Router>
+        <Layout location={props.location}>
+            <Route path="/projects/map" component={ProjectsOnMap} />
+            <Route path="/list/:categoryName/:rent?" component={PostList} />
+            <Route exact path="/" component={PostList} />
+        </Layout>
+    </Router>
 );

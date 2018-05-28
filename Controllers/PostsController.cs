@@ -30,12 +30,18 @@ namespace Thaiproperty.Controllers
         }
 
         [HttpGet] // /api/posts
-        public async Task<IActionResult> GetAll(int limit = _defaultLimit, [FromQuery] int type = 0)
+        public async Task<IActionResult> GetAll(int limit = _defaultLimit, [FromQuery] int typeId = 0, [FromQuery] bool? forRent = null)
         {
             var result = _postRepository.GetPostList();
-
-            if (type > 0)
-                result = result.Where(p => p.TypeId == type);
+            // _logger.LogDebug(forRent.HasValue ? "Has Value" : "No value (null)");
+            
+            if (typeId > 0)
+                result = result.Where(p => p.TypeId == typeId);
+            
+            if (forRent.HasValue)
+            {
+                result = result.Where(p => p.IsForRent == forRent.Value);
+            }
             
             if (result == null)
             {
