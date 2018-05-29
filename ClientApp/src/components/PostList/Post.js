@@ -20,7 +20,7 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
             
             <div className="pull-left col-xs-12">
                 <a href={`/post/${postId}`} title={title}>
-                    <LazyLoad width={200} height={150} minHeight={150} offset={150} debounce={200}
+                    <LazyLoad width={200} height={150} minHeight={150} offset={300} debounce={100}
                         placeholder={<div style={{margin:20}}>
                                         <Spinner size="small" style={{marginRight:10}}/> 
                                         <span className="text-muted">Loading image...</span>
@@ -50,7 +50,7 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
                         <Icon name="clock-o" fixedWidth />{moment(postDate).fromNow()}
                     </div>
                     <div className="text-muted">
-                        <Icon name="map-marker" fixedWidth />เขต{district.districtName}
+                        <Icon name="location-arrow" fixedWidth />เขต{district.districtName}
                     </div>
                     {project && 
                         <div>

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Select from 'antd/lib/select';
 import { forceCheck } from 'react-lazyload';
+import Select from 'antd/lib/select';
+import InfiniteScroll from 'react-infinite-scroller';
 
 
 // import user libriers
@@ -10,17 +11,22 @@ import { actionCreators } from '../redux/actions/PostList';
 import { openNotification } from '../components/Shared/Notification';
 import { Spinner } from '../components/Shared/Spinner';
 import { ErrorMessage } from '../components/Shared/ErrorMessage';
-import Post from '../components/PostList/Post';
 import { districtData } from '../components/Distict/Data';
+import { Loading } from '../components/Shared/Loading';
+import Post from '../components/PostList/Post';
 // import { CenterContent } from '../components/Shared/CenterContent';
 
+const Option = Select.Option;
 const LIMIT_POSTS_FROM_API = 500;
 const LIMIT_POSTS_DISPLAY = 100;
-const Option = Select.Option;
+const PAGESIZE = 20;
+const INFINITE_SCROLL_THRESHOLD = 100;
+const INFINITE_SCROLL_DELAY = 1000;
 
 class PostList extends Component {
     state = {
         posts: [], // store the filtered post list
+        pagedPosts: [], // paginated posts
         typeId: null, // category type (eg. คอนโด, บ้าน)
         isForRent: null,
         bedRoom: null,
@@ -28,7 +34,8 @@ class PostList extends Component {
         minPrice: 0,
         maxPrice: null,
         searchText: '',
-        isLoading: false, // this is local loading from search filter or sliding price limit
+        isLoading: false,  // this is local loading from search filter or sliding price limit
+        hasMoreItems: true, // for infinite-scroll
     };
 
     componentDidMount() {
@@ -37,7 +44,6 @@ class PostList extends Component {
         this.getData(this.props.match.params);
     }
     
-
     // Triggers when recieving project list on redux store or changes in redux-router params
     UNSAFE_componentWillReceiveProps({ posts, error, match }) {
         const prevParams = this.props.match.params;
@@ -47,34 +53,27 @@ class PostList extends Component {
             // there's changes in props.match.params (from redux-router)
             this.getData(match.params);
         }
-        // Destructing 'posts' and 'errorMessage' object from nextProps
+
         if (error) {
             openNotification({ message: 'Error loading data', description: error, type: 'error'});
         }
 
         if (posts && posts.length > 0) {
-            this.setState({ posts : posts.slice(0, LIMIT_POSTS_DISPLAY) });
+            this.setState({ 
+                posts : posts.slice(0, LIMIT_POSTS_DISPLAY),
+                pagedPosts : posts.slice(0, PAGESIZE),
+            });
         }
     }
 
     getData({ categoryName, rent }) {
-        // console.log(categoryName);
-        // console.log(rent);
         // call redux action creator to get Posts data
         this.props.requestPostList(categoryName, rent, LIMIT_POSTS_FROM_API);
     }
 
     onPostTypeChange = (typeId) => {
-        // typeId = Number(typeId);{{
+        // redirect page
         this.props.history.push(`/list/${typeId}`);
-        // const options = {
-        //     typeId,
-        //     isForRent: this.state.isForRent,
-        //     bedRoom: this.state.bedRoom,
-        //     district: this.state.district,
-        // }
-        // const posts = this.filteredPosts(this.props.posts, options);
-        // this.setState({ typeId, posts});
     }
 
     onForRentChange = (isForRent) => {
@@ -99,8 +98,7 @@ class PostList extends Component {
             bedRoom: this.state.bedRoom,
             district: arrDistrict,
         }
-        const posts = this.filteredPosts(this.props.posts, options);
-        this.setState({ district: arrDistrict, posts});
+        this.updatePosts(this.props.posts, options);
     }
 
     onBedRoomChange = (bedRoom) => {
@@ -116,31 +114,50 @@ class PostList extends Component {
             bedRoom,
             district: this.state.district,
         }
-        const posts = this.filteredPosts(this.props.posts, options);
-        this.setState({ bedRoom, posts });
+        this.updatePosts(this.props.posts, options);
     }
 
-    filteredPosts = (posts, { typeId, isForRent, bedRoom, district = [] }) => {
+    // update this.state.posts[] to filtered from this.props.posts[]
+    updatePosts = (posts = [], options = {}) => {
         let filtered = posts;
-        // if (typeId != null) {
-        //     filtered = posts.filter(post => post.typeId === Number(typeId));
-        // } else {
-        //     filtered = posts; // All Category
-        // };
-
-        // if (isForRent != null) {
-        //     filtered = filtered.filter(post => post.isForRent === Boolean(isForRent));
-        // }
-
-        if (bedRoom != null) {
-            filtered = filtered.filter(post => post.bedRoom === Number(bedRoom));
+        console.log('options=', options);
+        if (options.bedRoom != null) {
+            filtered = filtered.filter(post => post.bedRoom === options.bedRoom);
         }
 
-        if (district.length > 0) {
-            filtered = filtered.filter(post =>  district.includes(post.district.districtId) )
+        if (options.district.length > 0) {
+            filtered = filtered.filter(post => options.district.includes(post.district.districtId) )
         }
+       this.setState({ 
+            posts: filtered.slice(0, LIMIT_POSTS_DISPLAY),
+            pagedPosts: filtered.slice(0, PAGESIZE),
+            hasMoreItems: filtered.length > PAGESIZE,
+            ...options
+        });
+        console.log('reset infinite-scroll pageLoaded to 1');
+        this.scroll.pageLoaded = 1;
         setTimeout(forceCheck, 300); // force lazy-load image to check even no-scrolling
-        return filtered.slice(0, LIMIT_POSTS_DISPLAY);
+    }
+
+    loadMore = (pageNum) => {
+        console.log('loadMore() from infinite-scroll');
+        console.log('pageNumber=', pageNum);
+
+        --pageNum; // minus 1 for array index.
+        let pagedPosts = this.state.posts.slice(pageNum * PAGESIZE, (pageNum + 1) * PAGESIZE);
+        console.log('pagedPosts=',pagedPosts);
+        if (pagedPosts.length >0) {
+            console.log('has more data... concating array');
+            setTimeout(() => {
+                console.log('setstate.. pagedPosts');
+                this.setState({ pagedPosts: this.state.pagedPosts.concat(pagedPosts) });
+            },
+            INFINITE_SCROLL_DELAY);
+        } else {
+            // no more infinite-scroll loader
+            console.log('no more infinite-scroll loader');
+            this.setState({ hasMoreItems: false });
+        }
     }
       
     render() {
@@ -206,27 +223,40 @@ class PostList extends Component {
                 <div>
                     แสดงผลการค้นหา {this.state.posts.length} รายการ
                 </div>
-                {this.state.posts.map((p, index) => (
-                    <Post
-                        key={p.postId}
-                        index={index}
-                        typeId={p.typeId}
-                        postId={p.postId}
-                        categoryId={p.typeId}
-                        title={p.title}
-                        price={p.price}
-                        forRent={p.isForRent}
-                        totalView={p.totalView}
-                        thumbnailUrl={p.thumbnailUrl}
-                        postDate={p.postDate}
-                        project={p.project}
-                        bedRoom={p.bedRoom}
-                        bathRoom={p.bathRoom}
-                        area={p.area}
-                        areaUnit={p.areaUnit}
-                        district={p.district}>
-                    </Post>
-                ))}
+                <InfiniteScroll
+                    pageStart={1}
+                    loadMore={this.loadMore}
+                    hasMore={this.state.hasMoreItems}
+                    initialLoad={false}
+                    loader={<Loading />}
+                    threshold={INFINITE_SCROLL_THRESHOLD}
+                    useWindow={true}
+                    ref={ (scroll) => { this.scroll = scroll; } }
+                    >
+                    <div>
+                    {this.state.pagedPosts.map((p, index) => (
+                        <Post
+                            key={p.postId}
+                            index={index}
+                            typeId={p.typeId}
+                            postId={p.postId}
+                            categoryId={p.typeId}
+                            title={p.title}
+                            price={p.price}
+                            forRent={p.isForRent}
+                            totalView={p.totalView}
+                            thumbnailUrl={p.thumbnailUrl}
+                            postDate={p.postDate}
+                            project={p.project}
+                            bedRoom={p.bedRoom}
+                            bathRoom={p.bathRoom}
+                            area={p.area}
+                            areaUnit={p.areaUnit}
+                            district={p.district}>
+                        </Post>
+                    ))}
+                    </div>
+                </InfiniteScroll>
             </div>
         );
     }
