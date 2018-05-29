@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { forceCheck } from 'react-lazyload';
 import Select from 'antd/lib/select';
+import Slider from 'antd/lib/slider';
 import InfiniteScroll from 'react-infinite-scroller';
 
 // import user libriers
@@ -15,10 +16,10 @@ import Post from '../components/PostList/Post';
 
 const Option = Select.Option;
 const LIMIT_POSTS_FROM_API = 500;
-const LIMIT_POSTS_DISPLAY = 100;
+const LIMIT_POSTS_DISPLAY = 200;
 const PAGESIZE = 20;
 const INFINITE_SCROLL_THRESHOLD = 200;
-const INFINITE_SCROLL_DELAY = 2500;
+const INFINITE_SCROLL_DELAY = 1000;
 
 class PostList extends Component {
     state = {
@@ -30,6 +31,8 @@ class PostList extends Component {
         district: [], // array of districtId
         minPrice: 0,
         maxPrice: null,
+        sliderMaxPrice: null,
+        sliderStep: 1000,
         searchText: '',
         isLoading: false,  // this is local loading from search filter or sliding price limit
         hasMoreItems: true, // for infinite-scroll
@@ -64,7 +67,13 @@ class PostList extends Component {
 
     getData({ categoryName, rent }) {
         // call redux action creator to get Posts data
+        console.log(rent);
         this.props.requestPostList(categoryName, rent, LIMIT_POSTS_FROM_API);
+        if (rent === 'rent') {
+            this.setState({ sliderMaxPrice: 150000, maxPrice: 150000, sliderStep: 1000 });
+        } else {
+            this.setState({ sliderMaxPrice: 25000000, maxPrice: 25000000, sliderStep: 100000 });
+        }
     }
 
     onPostTypeChange = (typeId) => {
@@ -86,17 +95,6 @@ class PostList extends Component {
         // this.setState({ isForRent, posts });
     }
 
-    onDistrictChange = (district = []) => {
-        const arrDistrict = district.map(d => Number(d)); // Convert to array of int
-        const options = {
-            // typeId: this.state.typeId,
-            // isForRent: this.state.isForRent,
-            bedRoom: this.state.bedRoom,
-            district: arrDistrict,
-        }
-        this.updatePosts(this.props.posts, options);
-    }
-
     onBedRoomChange = (bedRoom) => {
         if (!bedRoom) { 
             bedRoom = null;
@@ -109,22 +107,59 @@ class PostList extends Component {
             // isForRent: this.state.isForRent,
             bedRoom,
             district: this.state.district,
+            minPrice: this.state.minPrice,
+            maxPrice: this.state.maxPrice,
+        }
+        this.updatePosts(this.props.posts, options, true);
+    }
+
+    onDistrictChange = (district = []) => {
+        const arrDistrict = district.map(d => Number(d)); // Convert to array of int
+        const options = {
+            // typeId: this.state.typeId,
+            // isForRent: this.state.isForRent,
+            bedRoom: this.state.bedRoom,
+            district: arrDistrict,
+            minPrice: this.state.minPrice,
+            maxPrice: this.state.maxPrice,
         }
         this.updatePosts(this.props.posts, options);
     }
 
+    onPriceFilterChanged = value => {
+        const minPrice = value[0];
+        const maxPrice = value[1];
+        const options = {
+            minPrice, maxPrice,
+            bedRoom: this.state.bedRoom,
+            district: this.state.district,
+        }
+        this.updatePosts(this.props.posts, options, false);
+    };
+
+    sliderTooltipFormatter = value => {
+        return value.toLocaleString('en', { maximumSignificantDigits: 3 });
+    };
+
     // update this.state.posts[] to filtered from this.props.posts[]
-    updatePosts = (posts = [], options = {}) => {
-        this.setState({ isLoading: true });
+    updatePosts = (posts = [], options = {}, showLoader = true) => {
+        if (showLoader) {
+            this.setState({ isLoading: true });
+        };
+
         let filtered = posts;
-        console.log('options=', options);
+        let { district } = options;
 
         if (options.bedRoom != null) {
             filtered = filtered.filter(post => post.bedRoom === options.bedRoom);
         }
 
-        if (options.district.length > 0) {
-            filtered = filtered.filter(post => options.district.includes(post.district.districtId) )
+        if (district && district.length > 0) {
+            filtered = filtered.filter(post => district.includes(post.district.districtId) )
+        }
+
+        if (options.maxPrice) {
+            filtered = filtered.filter(post => post.price >= options.minPrice && post.price <= options.maxPrice);
         }
 
         this.setState({ 
@@ -133,12 +168,13 @@ class PostList extends Component {
             hasMoreItems: filtered.length > PAGESIZE,
             ...options
         });
-        if (this.scroll && this.scroll.pageLoaded) {
-            console.log('reset infinite-scroll pageLoaded to 1');
-            this.scroll.pageLoaded = 1;
+
+        if (this.infiniteScroll && this.infiniteScroll.pageLoaded) {
+            console.log('reset infinite-scroll pageLoaded to 1 * from', this.infiniteScroll.pageLoaded);
+            this.infiniteScroll.pageLoaded = 1;
         }
-        setTimeout(() => this.setState({ isLoading: false }), 600);
-        setTimeout(forceCheck, 500); // force lazy-load image to check even no-scrolling
+        setTimeout(() => this.setState({ isLoading: false }), 200);
+        setTimeout(forceCheck, 600); // force lazy-load image to check even no-scrolling
     }
 
     loadMore = (pageNum) => {
@@ -161,7 +197,7 @@ class PostList extends Component {
             this.setState({ hasMoreItems: false });
         }
     }
-      
+
     render() {
         if (this.props.isLoading) {
             return <Loading text="กำลังโหลดข้อมูล" />;
@@ -215,6 +251,16 @@ class PostList extends Component {
                             <Option key={d.id} value={d.id} title={d.name}>{d.name}</Option>
                         ))}
                     </Select>
+                    <Slider
+                        range style={{ width: '100%' }}
+                        disabled={this.state.isLoading}
+                        defaultValue={[0, this.state.maxPrice]}
+                        step={this.state.sliderStep}
+                        max={this.state.sliderMaxPrice}
+                        value={[this.state.minPrice, this.state.maxPrice]}
+                        onChange={this.onPriceFilterChanged}
+                        tipFormatter={this.sliderTooltipFormatter}
+                        />
                 </div>
                 <div>
                     แสดงผลการค้นหา {this.state.posts.length} รายการ
@@ -229,7 +275,7 @@ class PostList extends Component {
                         loader={<Loading />}
                         threshold={INFINITE_SCROLL_THRESHOLD}
                         useWindow={true}
-                        ref={ (scroll) => { this.scroll = scroll; } }
+                        ref={ (infiniteScroll) => { this.infiniteScroll = infiniteScroll; } }
                         >
                         <div>
                         {this.state.pagedPosts.map((p, index) => (

@@ -6,13 +6,15 @@ import { Icon } from 'react-fa';
 import LazyLoad from 'react-lazyload';
 import { PlaceHolder } from '../Shared/LazyLoadPlaceholder';
 
-const LAZYLOAD_OFFSET = 400;
+const LAZYLOAD_OFFSET = 500;
 
 export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent, project, postDate, district, ...props}) => {
     let sellingText = forRent ? 'ให้เช่า' : 'ขาย';
-    let price = props.price.toLocaleString('thai', { style: 'decimal', minimumFractionDigits: 0 });
+    let priceText = props.price.toLocaleString('thai', { style: 'decimal', minimumFractionDigits: 0 });
     let altenateCss = props.index % 2 ? 'altenate-item' : '';
     let haveRooms = typeId === 2 || typeId === 3 || typeId === 4;
+    let isCondoForSale = typeId === 4 && !forRent;
+    const imgStyle = { maxWidth: 200, minHeight:200, marginRight: 10, height: 'auto' };
 
     return (
         <Card hoverable
@@ -26,7 +28,7 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
                         placeholder={<PlaceHolder />}>
                         <img 
                             className="img-propertylist"
-                            style={{ maxWidth: 200, minHeight:200, height: 'auto'}}
+                            style={imgStyle}
                             src={thumbnailUrl} 
                             alt={title}
                         />
@@ -42,8 +44,9 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
                 </a>
                 <br/>
                 <span className="">
-                    {`${sellingText} ${price} บาท`} 
-                    {haveRooms && <ShowRooms bed={props.bedRoom} bath={props.bathRoom} />}
+                    <span style={{ color: '#bb0000'}}>{`${sellingText} ${priceText} บาท`}</span>
+                    {isCondoForSale && <ShowPricePerSqm area={props.area} price={props.price} />}
+                    {haveRooms && <ShowRooms bed={props.bedRoom} bath={props.bathRoom} area={props.area} areaUnit={props.areaUnit} />}
                     <br />
                     <div className="text-muted">
                         <Icon name="clock-o" fixedWidth />{moment(postDate).fromNow()}
@@ -62,11 +65,34 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
     );
 }
 
-const ShowRooms = ({bed, bath}) => (
+const ShowRooms = ({bed, bath, area, areaUnit}) => (
     <div className="pull-right">
         <span style={{ marginLeft:5 }}> 
             {bed} <Icon name="bed" fixedWidth style={{ marginRight: 10 }}/>
             {bath} <Icon name="bath" fixedWidth style={{ marginRight: 10 }}/>
+            {area} {areaText(areaUnit)}
         </span>
     </div>
 )
+
+const ShowPricePerSqm = ({area, price}) => {
+    const pricePerSqm = Math.floor(price / area);
+    return (
+        <span style={{ marginLeft:5 }}> 
+            ({pricePerSqm.toLocaleString()}/ตรม)
+        </span>
+    );
+}
+
+const areaText = (areaUnit) => {
+    switch (areaUnit) {
+        case 1:
+            return 'ตรว.';
+        case 2:
+            return 'ตรม.';
+        case 3:
+            return 'ไร่';
+        default:
+            break;
+    }
+}

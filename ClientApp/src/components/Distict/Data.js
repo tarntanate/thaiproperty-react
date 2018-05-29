@@ -1,6 +1,6 @@
 export const districtData = [{
     "id": 1,
-    "name": "(ไม่ระบุ)/ตจว.",
+    "name": "ไม่ระบุ",
     "provinceId": 1
 }, {
     "id": 2,
