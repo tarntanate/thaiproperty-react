@@ -5,27 +5,24 @@ import { forceCheck } from 'react-lazyload';
 import Select from 'antd/lib/select';
 import InfiniteScroll from 'react-infinite-scroller';
 
-
 // import user libriers
+import { districtData } from '../components/Distict/Data';
 import { actionCreators } from '../redux/actions/PostList';
 import { openNotification } from '../components/Shared/Notification';
-import { Spinner } from '../components/Shared/Spinner';
 import { ErrorMessage } from '../components/Shared/ErrorMessage';
-import { districtData } from '../components/Distict/Data';
 import { Loading } from '../components/Shared/Loading';
 import Post from '../components/PostList/Post';
-// import { CenterContent } from '../components/Shared/CenterContent';
 
 const Option = Select.Option;
 const LIMIT_POSTS_FROM_API = 500;
 const LIMIT_POSTS_DISPLAY = 100;
 const PAGESIZE = 20;
-const INFINITE_SCROLL_THRESHOLD = 100;
-const INFINITE_SCROLL_DELAY = 1000;
+const INFINITE_SCROLL_THRESHOLD = 200;
+const INFINITE_SCROLL_DELAY = 500;
 
 class PostList extends Component {
     state = {
-        posts: [], // store the filtered post list
+        posts: [], // store the filtered post list from redux store
         pagedPosts: [], // paginated posts
         typeId: null, // category type (eg. คอนโด, บ้าน)
         isForRent: null,
@@ -40,7 +37,6 @@ class PostList extends Component {
 
     componentDidMount() {
         console.log('PostList container componentDidMount()');
-        console.log(this.props);
         this.getData(this.props.match.params);
     }
     
@@ -119,8 +115,10 @@ class PostList extends Component {
 
     // update this.state.posts[] to filtered from this.props.posts[]
     updatePosts = (posts = [], options = {}) => {
+        this.setState({ isLoading: true });
         let filtered = posts;
         console.log('options=', options);
+
         if (options.bedRoom != null) {
             filtered = filtered.filter(post => post.bedRoom === options.bedRoom);
         }
@@ -128,15 +126,19 @@ class PostList extends Component {
         if (options.district.length > 0) {
             filtered = filtered.filter(post => options.district.includes(post.district.districtId) )
         }
-       this.setState({ 
+
+        this.setState({ 
             posts: filtered.slice(0, LIMIT_POSTS_DISPLAY),
             pagedPosts: filtered.slice(0, PAGESIZE),
             hasMoreItems: filtered.length > PAGESIZE,
             ...options
         });
         console.log('reset infinite-scroll pageLoaded to 1');
-        this.scroll.pageLoaded = 1;
-        setTimeout(forceCheck, 300); // force lazy-load image to check even no-scrolling
+        if (this.scroll && this.scroll.pageLoaded) {
+            this.scroll.pageLoaded = 1;
+        }
+        setTimeout(() => this.setState({ isLoading: false }), 600);
+        setTimeout(forceCheck, 500); // force lazy-load image to check even no-scrolling
     }
 
     loadMore = (pageNum) => {
@@ -145,9 +147,9 @@ class PostList extends Component {
 
         --pageNum; // minus 1 for array index.
         let pagedPosts = this.state.posts.slice(pageNum * PAGESIZE, (pageNum + 1) * PAGESIZE);
-        console.log('pagedPosts=',pagedPosts);
-        if (pagedPosts.length >0) {
-            console.log('has more data... concating array');
+        console.log('pagedPosts.length =',pagedPosts.length);
+        if (pagedPosts.length > 0) {
+            console.log('has more data.. added to pagedPosts array');
             setTimeout(() => {
                 console.log('setstate.. pagedPosts');
                 this.setState({ pagedPosts: this.state.pagedPosts.concat(pagedPosts) });
@@ -155,20 +157,14 @@ class PostList extends Component {
             INFINITE_SCROLL_DELAY);
         } else {
             // no more infinite-scroll loader
-            console.log('no more infinite-scroll loader');
+            console.log('no more infinite-scroll data, disable hasMoreItems.');
             this.setState({ hasMoreItems: false });
         }
     }
       
     render() {
         if (this.props.isLoading) {
-            return (
-              <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                กำลังโหลดข้อมูล... <br />
-                <br />
-                <Spinner />
-              </div>
-            );
+            return <Loading text="กำลังโหลดข้อมูล" />;
         }
 
         return (
@@ -223,40 +219,43 @@ class PostList extends Component {
                 <div>
                     แสดงผลการค้นหา {this.state.posts.length} รายการ
                 </div>
-                <InfiniteScroll
-                    pageStart={1}
-                    loadMore={this.loadMore}
-                    hasMore={this.state.hasMoreItems}
-                    initialLoad={false}
-                    loader={<Loading />}
-                    threshold={INFINITE_SCROLL_THRESHOLD}
-                    useWindow={true}
-                    ref={ (scroll) => { this.scroll = scroll; } }
-                    >
-                    <div>
-                    {this.state.pagedPosts.map((p, index) => (
-                        <Post
-                            key={p.postId}
-                            index={index}
-                            typeId={p.typeId}
-                            postId={p.postId}
-                            categoryId={p.typeId}
-                            title={p.title}
-                            price={p.price}
-                            forRent={p.isForRent}
-                            totalView={p.totalView}
-                            thumbnailUrl={p.thumbnailUrl}
-                            postDate={p.postDate}
-                            project={p.project}
-                            bedRoom={p.bedRoom}
-                            bathRoom={p.bathRoom}
-                            area={p.area}
-                            areaUnit={p.areaUnit}
-                            district={p.district}>
-                        </Post>
-                    ))}
-                    </div>
-                </InfiniteScroll>
+                {this.state.isLoading && <Loading text="" />}
+                {!this.state.isLoading && 
+                    <InfiniteScroll
+                        pageStart={1}
+                        loadMore={this.loadMore}
+                        hasMore={this.state.hasMoreItems}
+                        initialLoad={false}
+                        loader={<Loading />}
+                        threshold={INFINITE_SCROLL_THRESHOLD}
+                        useWindow={true}
+                        ref={ (scroll) => { this.scroll = scroll; } }
+                        >
+                        <div>
+                        {this.state.pagedPosts.map((p, index) => (
+                            <Post
+                                key={p.postId}
+                                index={index}
+                                typeId={p.typeId}
+                                postId={p.postId}
+                                categoryId={p.typeId}
+                                title={p.title}
+                                price={p.price}
+                                forRent={p.isForRent}
+                                totalView={p.totalView}
+                                thumbnailUrl={p.thumbnailUrl}
+                                postDate={p.postDate}
+                                project={p.project}
+                                bedRoom={p.bedRoom}
+                                bathRoom={p.bathRoom}
+                                area={p.area}
+                                areaUnit={p.areaUnit}
+                                district={p.district}>
+                            </Post>
+                        ))}
+                        </div>
+                    </InfiniteScroll>
+                }
             </div>
         );
     }

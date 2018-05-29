@@ -4,7 +4,9 @@ import 'moment/locale/th';
 import Card from 'antd/lib/card';
 import { Icon } from 'react-fa';
 import LazyLoad from 'react-lazyload';
-import { Spinner } from '../Shared/Spinner';
+import { PlaceHolder } from '../Shared/LazyLoadPlaceholder';
+
+const LAZYLOAD_OFFSET = 400;
 
 export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent, project, postDate, district, ...props}) => {
     let sellingText = forRent ? 'ให้เช่า' : 'ขาย';
@@ -20,11 +22,8 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
             
             <div className="pull-left col-xs-12">
                 <a href={`/post/${postId}`} title={title}>
-                    <LazyLoad width={200} height={150} minHeight={150} offset={300} debounce={100}
-                        placeholder={<div style={{margin:20}}>
-                                        <Spinner size="small" style={{marginRight:10}}/> 
-                                        <span className="text-muted">Loading image...</span>
-                                    </div>}>
+                    <LazyLoad width={200} height={150} minHeight={150} offset={LAZYLOAD_OFFSET} debounce={100}
+                        placeholder={<PlaceHolder />}>
                         <img 
                             className="img-propertylist"
                             style={{ maxWidth: 200, minHeight:200, height: 'auto'}}
