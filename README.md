@@ -12,9 +12,9 @@ Note2: Performance may be drop on slow machine with a lot of markers (eg. more t
 
 ---
 
-### See a real demo app at http://api.thaiproperty.in.th/projectlist
+### See a real demo app at http://react.thaiproperty.in.th/
 
-### See a raw json response from API at http://api.thaiproperty.in.th/api/Project/GetAllProjectsWithAvgPrice
+### See a raw json response from API at http://react.thaiproperty.in.th/api/projects/withAvgPrice
 
 ---
 

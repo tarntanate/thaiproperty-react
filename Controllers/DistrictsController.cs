@@ -18,12 +18,10 @@ namespace Thaiproperty.Controllers
     public class DistrictsController : Controller
     {
         private readonly ThaipropertyDbContext _dbContext;
-        private readonly PostRepository _postRepository;
 
         public DistrictsController(ThaipropertyDbContext dbContext)
         {
             _dbContext = dbContext;
-            // _postRepository = new PostRepository(dbContext);
         }
 
         [HttpGet] // /api/districts

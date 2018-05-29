@@ -183,7 +183,7 @@ class PostList extends Component {
                         <Option value="land">ที่ดิน</Option>
                         <Option value="building">ตึกแถว/อาคารพานิชย์</Option>
                         <Option value="office">อาคารสำนักงาน</Option>
-                        <Option value="aparment">อพาร์ทเมนท์</Option>
+                        <Option value="apartment">อพาร์ทเมนท์</Option>
                     </Select>
                     <Select size="large" dropdownMatchSelectWidth={false} placeholder="ขาย/ให้เช่า" 
                         onChange={this.onForRentChange}
