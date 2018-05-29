@@ -30,7 +30,7 @@ Note2: Performance may be drop on slow machine with a lot of markers (eg. more t
 
 In development: http://localhost:5000/api/
 
-In production: http://api.thaiproperty.in.th/api
+In production: http://react.thaiproperty.in.th/api
 
 or via https with port 5001
 
@@ -40,7 +40,7 @@ In development: https://localhost:5001/api/
 
 ### Project structure
 
-Client-side (React App and also node_modules) located inside 'ClientApp' folder.
+Client-side (React App) located inside 'ClientApp' folder.
 
 ---
 
