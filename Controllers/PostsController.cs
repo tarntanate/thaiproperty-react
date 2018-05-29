@@ -20,7 +20,7 @@ namespace Thaiproperty.Controllers
         private readonly ThaipropertyDbContext _dbContext;
         private readonly PostRepository _postRepository;
         private readonly ILogger<PostsController> _logger;
-        private const int _defaultLimit = 100;
+        private const int _defaultLimit = 500;
 
         public PostsController(ThaipropertyDbContext dbContext, ILogger<PostsController> logger)
         {

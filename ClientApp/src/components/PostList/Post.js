@@ -4,6 +4,7 @@ import 'moment/locale/th';
 import Card from 'antd/lib/card';
 import { Icon } from 'react-fa';
 import LazyLoad from 'react-lazyload';
+import { Spinner } from '../Shared/Spinner';
 
 export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent, project, postDate, district, ...props}) => {
     let sellingText = forRent ? 'ให้เช่า' : 'ขาย';
@@ -12,7 +13,7 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
 
     return (
         <Card className={altenateCss} bodyStyle={{ padding: 10 }} hoverable
-            style={{ marginBottom: 5, cursor: 'default'}}>
+            style={{ marginBottom: 5, cursor: 'default', borderRadius: '4px'}}>
             <a className="text-secondary" 
                 href={`/post/${postId}`} 
                 title={title} 
@@ -21,10 +22,14 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
             </a>
             <div>
                 <a href={`/post/${postId}`} title={title}>
-                    <LazyLoad width={200} height={150} offset={200}>
+                    <LazyLoad width={200} height={150} minHeight={150} offset={150} debounce={200}
+                        placeholder={<div style={{margin:20}}>
+                                        <Spinner size="small" style={{marginRight:10}}/> 
+                                        <span className="text-muted">Loading image...</span>
+                                    </div>}>
                         <img 
                             className="img-propertylist"
-                            style={{ maxWidth: 200, height: 'auto'}}
+                            style={{ maxWidth: 200, minHeight:200, height: 'auto'}}
                             src={thumbnailUrl} 
                             alt={title}
                         />

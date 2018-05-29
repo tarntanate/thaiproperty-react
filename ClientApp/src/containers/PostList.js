@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Select from 'antd/lib/select';
+import { forceCheck } from 'react-lazyload';
+
 
 // import user libriers
 import { actionCreators } from '../redux/actions/PostList';
@@ -12,7 +14,7 @@ import Post from '../components/PostList/Post';
 import { districtData } from '../components/Distict/Data';
 // import { CenterContent } from '../components/Shared/CenterContent';
 
-const LIMIT_POSTS_FROM_API = 300;
+const LIMIT_POSTS_FROM_API = 500;
 const LIMIT_POSTS_DISPLAY = 100;
 const Option = Select.Option;
 
@@ -38,7 +40,7 @@ class PostList extends Component {
     UNSAFE_componentWillReceiveProps({ posts, error, match }) {
         const prevParams = this.props.match.params;
         const { categoryName, rent } = match.params;
-        console.log(match.params);
+        console.log('posts.length=',posts.length);
         if (prevParams.categoryName !== categoryName || prevParams.rent !== rent) {
             // there's changes in props.match.params (from redux-router)
             this.getData(match.params);
@@ -77,22 +79,22 @@ class PostList extends Component {
     onForRentChange = (isForRent) => {
         const { categoryName } = this.props.match.params;
         this.props.history.push(`/list/${categoryName}/${isForRent}`);
-        isForRent = Boolean(Number(isForRent));
-        const options = {
-            typeId: this.state.typeId,
-            isForRent,
-            bedRoom: this.state.bedRoom,
-            district: this.state.district,
-        }
-        const posts = this.filteredPosts(this.props.posts, options);
-        this.setState({ isForRent, posts });
+        // isForRent = Boolean(Number(isForRent));
+        // const options = {
+        //     typeId: this.state.typeId,
+        //     isForRent,
+        //     bedRoom: this.state.bedRoom,
+        //     district: this.state.district,
+        // }
+        // const posts = this.filteredPosts(this.props.posts, options);
+        // this.setState({ isForRent, posts });
     }
 
     onDistrictChange = (district = []) => {
         const arrDistrict = district.map(d => Number(d)); // Convert to array of int
         const options = {
-            typeId: this.state.typeId,
-            isForRent: this.state.isForRent,
+            // typeId: this.state.typeId,
+            // isForRent: this.state.isForRent,
             bedRoom: this.state.bedRoom,
             district: arrDistrict,
         }
@@ -108,8 +110,8 @@ class PostList extends Component {
         }
 
         const options = {
-            typeId: this.state.typeId,
-            isForRent: this.state.isForRent,
+            // typeId: this.state.typeId,
+            // isForRent: this.state.isForRent,
             bedRoom,
             district: this.state.district,
         }
@@ -118,16 +120,16 @@ class PostList extends Component {
     }
 
     filteredPosts = (posts, { typeId, isForRent, bedRoom, district = [] }) => {
-        let filtered;
-        if (typeId != null) {
-            filtered = posts.filter(post => post.typeId === Number(typeId));
-        } else {
-            filtered = posts; // All Category
-        };
+        let filtered = posts;
+        // if (typeId != null) {
+        //     filtered = posts.filter(post => post.typeId === Number(typeId));
+        // } else {
+        //     filtered = posts; // All Category
+        // };
 
-        if (isForRent != null) {
-            filtered = filtered.filter(post => post.isForRent === Boolean(isForRent));
-        }
+        // if (isForRent != null) {
+        //     filtered = filtered.filter(post => post.isForRent === Boolean(isForRent));
+        // }
 
         if (bedRoom != null) {
             filtered = filtered.filter(post => post.bedRoom === Number(bedRoom));
@@ -137,7 +139,7 @@ class PostList extends Component {
             console.log(district);
             filtered = filtered.filter(post =>  district.includes(post.district.districtId) )
         }
-
+        setTimeout(forceCheck(), 200);
         return filtered.slice(0, LIMIT_POSTS_DISPLAY);
     }
       
@@ -175,7 +177,7 @@ class PostList extends Component {
                         defaultValue={this.props.match.params.rent}
                         className="dropdown">
                         <Option value="sale">ขาย</Option>
-                        <Option value="ให้เช่า">ให้เช่า</Option>
+                        <Option value="rent">ให้เช่า</Option>
                     </Select>
                     <Select size="large" dropdownMatchSelectWidth={false} placeholder="จำนวนห้องนอน" 
                         onChange={this.onBedRoomChange}
@@ -189,13 +191,15 @@ class PostList extends Component {
                     </Select>
                     <Select
                         mode="multiple" size="large"
+                        allowClear={true}
+                        optionFilterProp="title"
                         onChange={this.onDistrictChange}
                         className="dropdown"
                         placeholder="เลือกเขต"
                         style={{minWidth: '100%'}}
                         >
                         {districtData.map(d => (
-                            <Option key={d.id} value={d.id}>{d.name}</Option>
+                            <Option key={d.id} value={d.id} title={d.name}>{d.name}</Option>
                         ))}
                     </Select>
                 </div>
