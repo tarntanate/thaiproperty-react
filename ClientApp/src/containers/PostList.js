@@ -70,7 +70,7 @@ class PostList extends Component {
         console.log(rent);
         this.props.requestPostList(categoryName, rent, LIMIT_POSTS_FROM_API);
         if (rent === 'rent') {
-            this.setState({ sliderMaxPrice: 150000, maxPrice: 150000, sliderStep: 1000 });
+            this.setState({ sliderMaxPrice: 150000, minPrice:0, maxPrice: 150000, sliderStep: 1000 });
         } else {
             this.setState({ sliderMaxPrice: 25000000, maxPrice: 25000000, sliderStep: 100000 });
         }
