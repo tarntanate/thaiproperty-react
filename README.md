@@ -4,11 +4,7 @@
 
 ### This application demonstrate of listing condominium projects on a Google Map (as Marker & MarkerClusterer). User allow to filter the price based on average price/sqm. via slider or filter by project name with a "**real-time**" re-rendering on a map.
 
-### Data sources were based on www.thaiproperty.in.th (dev DB not production DB)
-
-Note: Filter only either criteria only, cannot combine search critera for easy user usage.
-
-Note2: Performance may be drop on slow machine with a lot of markers (eg. more than 200 projects list on a map).
+### Data sources were sampled from www.thaiproperty.in.th (dev DB not production DB)
 
 ---
 

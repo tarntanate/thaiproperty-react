@@ -18,7 +18,7 @@ const LIMIT_POSTS_FROM_API = 500;
 const LIMIT_POSTS_DISPLAY = 100;
 const PAGESIZE = 20;
 const INFINITE_SCROLL_THRESHOLD = 200;
-const INFINITE_SCROLL_DELAY = 500;
+const INFINITE_SCROLL_DELAY = 2500;
 
 class PostList extends Component {
     state = {
@@ -133,8 +133,8 @@ class PostList extends Component {
             hasMoreItems: filtered.length > PAGESIZE,
             ...options
         });
-        console.log('reset infinite-scroll pageLoaded to 1');
         if (this.scroll && this.scroll.pageLoaded) {
+            console.log('reset infinite-scroll pageLoaded to 1');
             this.scroll.pageLoaded = 1;
         }
         setTimeout(() => this.setState({ isLoading: false }), 600);

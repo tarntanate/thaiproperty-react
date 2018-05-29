@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Col, Grid, Row } from 'react-bootstrap';
 import { Container, Col, Row } from 'reactstrap';
 import NavMenu from './NavMenu';
 import { PageFooter } from './Footer';
