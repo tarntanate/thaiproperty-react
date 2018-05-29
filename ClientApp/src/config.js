@@ -4,7 +4,7 @@ export const SITE_NAME = 'ThaiProperty.in.th';
 // default API endpoint url
 export const API_BASE_URL_DEV = 'http://localhost:5000/api';
 export const API_BASE_URL_DEV_HTTPS = 'https://localhost:5001/api';
-export const API_BASE_URL_PROD = 'http://api.thaiproperty.in.th/api';
+export const API_BASE_URL_PROD = 'http://react.thaiproperty.in.th/api';
 
 // Google Map
 export const GOOGLE_MAP_API_KEY = 'AIzaSyDCQ3Jlt7fPokdW1bs2jRcwf46l7kYJx5k';
