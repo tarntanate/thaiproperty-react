@@ -37,15 +37,16 @@ class PostList extends Component {
         this.getData(this.props.match.params);
     }
     
+
+    // Triggers when recieving project list on redux store or changes in redux-router params
     UNSAFE_componentWillReceiveProps({ posts, error, match }) {
         const prevParams = this.props.match.params;
         const { categoryName, rent } = match.params;
-        console.log('posts.length=',posts.length);
+
         if (prevParams.categoryName !== categoryName || prevParams.rent !== rent) {
             // there's changes in props.match.params (from redux-router)
             this.getData(match.params);
         }
-        // Triggers when recieving project list on redux store successful as a props
         // Destructing 'posts' and 'errorMessage' object from nextProps
         if (error) {
             openNotification({ message: 'Error loading data', description: error, type: 'error'});
@@ -136,10 +137,9 @@ class PostList extends Component {
         }
 
         if (district.length > 0) {
-            console.log(district);
             filtered = filtered.filter(post =>  district.includes(post.district.districtId) )
         }
-        setTimeout(forceCheck(), 200);
+        setTimeout(forceCheck, 300); // force lazy-load image to check even no-scrolling
         return filtered.slice(0, LIMIT_POSTS_DISPLAY);
     }
       
@@ -210,6 +210,7 @@ class PostList extends Component {
                     <Post
                         key={p.postId}
                         index={index}
+                        typeId={p.typeId}
                         postId={p.postId}
                         categoryId={p.typeId}
                         title={p.title}

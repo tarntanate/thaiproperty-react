@@ -10,17 +10,15 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
     let sellingText = forRent ? 'ให้เช่า' : 'ขาย';
     let price = props.price.toLocaleString('thai', { style: 'decimal', minimumFractionDigits: 0 });
     let altenateCss = props.index % 2 ? 'altenate-item' : '';
+    let haveRooms = typeId === 2 || typeId === 3 || typeId === 4;
 
     return (
-        <Card className={altenateCss} bodyStyle={{ padding: 10 }} hoverable
+        <Card hoverable
+            className={altenateCss} 
+            bodyStyle={{ padding: 10 }} 
             style={{ marginBottom: 5, cursor: 'default', borderRadius: '4px'}}>
-            <a className="text-secondary" 
-                href={`/post/${postId}`} 
-                title={title} 
-                style={{ fontWeight: 'bold', fontSize: '1.2em'}}>
-                {title}
-            </a>
-            <div>
+            
+            <div className="pull-left col-xs-12">
                 <a href={`/post/${postId}`} title={title}>
                     <LazyLoad width={200} height={150} minHeight={150} offset={150} debounce={200}
                         placeholder={<div style={{margin:20}}>
@@ -36,25 +34,40 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
                     </LazyLoad>
                 </a>
             </div>
-            <span className="">
-                {`${sellingText} ${price}`} - 
-                <span style={{ marginLeft:5 }}> 
-                    {props.bedRoom} <Icon name="bed" fixedWidth style={{ marginRight: 10 }}/>
-                    {props.bathRoom} <Icon name="bath" fixedWidth style={{ marginRight: 10 }}/>
+            <div className="col-xs-12">
+                <a className="text-secondary" 
+                    href={`/post/${postId}`} 
+                    title={title} 
+                    style={{ fontWeight: 'bold', fontSize: '1.2em'}}>
+                    {title}
+                </a>
+                <br/>
+                <span className="">
+                    {`${sellingText} ${price} บาท`} 
+                    {haveRooms && <ShowRooms bed={props.bedRoom} bath={props.bathRoom} />}
+                    <br />
+                    <div className="text-muted">
+                        <Icon name="clock-o" fixedWidth />{moment(postDate).fromNow()}
+                    </div>
+                    <div className="text-muted">
+                        <Icon name="map-marker" fixedWidth />เขต{district.districtName}
+                    </div>
+                    {project && 
+                        <div>
+                            <Icon name="map-marker" fixedWidth  />
+                            <a href={`/project/${project.projectId}`}>{project.projectName}</a>
+                        </div>}
                 </span>
-                <br />
-                <div className="text-muted">
-                    <Icon name="clock-o" fixedWidth />{moment(postDate).fromNow()} ({moment(postDate).toString()})
-                </div>
-                <div className="text-muted">
-                    <Icon name="marker" fixedWidth />เขต{district.districtName}
-                </div>
-                {project && 
-                    <div>
-                        <Icon name="map-marker" fixedWidth  />
-                        <a href={`/project/${project.projectId}`}>{project.projectName}</a>
-                    </div>}
-            </span>
+            </div>
         </Card>
     );
 }
+
+const ShowRooms = ({bed, bath}) => (
+    <div className="pull-right">
+        <span style={{ marginLeft:5 }}> 
+            {bed} <Icon name="bed" fixedWidth style={{ marginRight: 10 }}/>
+            {bath} <Icon name="bath" fixedWidth style={{ marginRight: 10 }}/>
+        </span>
+    </div>
+)
