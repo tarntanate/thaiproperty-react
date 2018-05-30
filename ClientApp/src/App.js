@@ -6,13 +6,14 @@ import { Route, BrowserRouter as Router } from 'react-router-dom';
 import Layout from './components/Layout';
 
 // Containers as route
-import Home from './containers/Home';
+import PostDetail from './containers/PostDetail';
 import ProjectsOnMap from './containers/ProjectsOnMap';
 import PostList from './containers/PostList';
 
 export default (props) => (
     <Router>
         <Layout location={props.location}>
+            <Route path="/post/:id" component={PostDetail} />
             <Route path="/projects/map" component={ProjectsOnMap} />
             <Route path="/list/:categoryName/:rent?" component={PostList} />
             <Route exact path="/" component={PostList} />

@@ -29,8 +29,8 @@ export default class NavMenu extends React.Component {
 
     render() {
         return (
-            <Navbar dark color="dark" fixed="top" expand="sm">
-                <NavbarBrand href="/">[Logo] React App</NavbarBrand>
+            <Navbar dark className="bg-gradient" fixed="top" expand="sm">
+                <NavbarBrand href="/">Demo React App</NavbarBrand>
                 <NavbarToggler onClick={this.toggleCollapse} />
                 <Collapse isOpen={this.state.isOpen} navbar>
                     <Nav className="ml-auto" navbar>

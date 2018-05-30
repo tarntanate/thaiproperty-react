@@ -5,6 +5,7 @@ import Card from 'antd/lib/card';
 import { Icon } from 'react-fa';
 import LazyLoad from 'react-lazyload';
 import { PlaceHolder } from '../Shared/LazyLoadPlaceholder';
+import { Link } from 'react-router-dom';
 
 const LAZYLOAD_OFFSET = [600,600];
 
@@ -23,7 +24,7 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
             style={{ marginBottom: 5, cursor: 'default', borderRadius: '4px'}}>
             
             <div className="pull-left col-xs-12">
-                <a href={`/post/${postId}`} title={title}>
+                <Link to={`/post/${postId}`} title={title}>
                     <LazyLoad width={200} height={150} minHeight={150} offset={LAZYLOAD_OFFSET} debounce={100}
                         placeholder={<PlaceHolder />}>
                         <img 
@@ -33,15 +34,15 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
                             alt={title}
                         />
                     </LazyLoad>
-                </a>
+                </Link>
             </div>
             <div className="col-xs-12">
-                <a className="text-secondary" 
-                    href={`/post/${postId}`} 
+                <Link className="text-secondary" 
+                    to={`/post/${postId}`} 
                     title={title} 
                     style={{ fontWeight: 'bold', fontSize: '1.2em'}}>
                     {title}
-                </a>
+                </Link>
                 <br/>
                 <span className="">
                     <span style={{ color: '#bb0000'}}>{`${sellingText} ${priceText} บาท`}</span>

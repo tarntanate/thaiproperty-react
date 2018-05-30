@@ -4,6 +4,6 @@ import { SITE_NAME } from '../config';
 
 export const PageFooter = props => (
   <CenterContent usePanel>
-    <span>&copy;{SITE_NAME} - By Tarntanate M.</span>
+    <span>&copy;2018 {SITE_NAME} - By Tarntanate M.</span>
   </CenterContent>
 );

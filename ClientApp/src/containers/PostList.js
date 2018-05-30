@@ -13,6 +13,7 @@ import { openNotification } from '../components/Shared/Notification';
 import { ErrorMessage } from '../components/Shared/ErrorMessage';
 import { Loading } from '../components/Shared/Loading';
 import Post from '../components/PostList/Post';
+import Button from 'antd/lib/button';
 
 const Option = Select.Option;
 const LIMIT_POSTS_FROM_API = 500;
@@ -36,6 +37,7 @@ class PostList extends Component {
         searchText: '',
         isLoading: false,  // this is local loading from search filter or sliding price limit
         hasMoreItems: true, // for infinite-scroll
+        sortBy: null,
     };
 
     componentDidMount() {
@@ -58,7 +60,14 @@ class PostList extends Component {
         }
 
         if (posts && posts.length > 0) {
+            const priceArr = posts.map(p => {
+                return p.price > 50000000 ? 0 : p.price; // cut the higher price more than 50million off
+            });
+            const maxPrice = Math.max(...priceArr);
+            console.log(maxPrice);
             this.setState({ 
+                maxPrice,
+                sliderMaxPrice: maxPrice,
                 posts : posts.slice(0, LIMIT_POSTS_DISPLAY),
                 pagedPosts : posts.slice(0, PAGESIZE),
             });
@@ -83,7 +92,15 @@ class PostList extends Component {
 
     onForRentChange = (isForRent) => {
         const { categoryName } = this.props.match.params;
-        this.props.history.push(`/list/${categoryName}/${isForRent}`);
+        if (categoryName) {
+            this.props.history.push(`/list/${categoryName}/${isForRent}`);
+        } else {
+            openNotification({ 
+                message: 'ต้องทำการเลือกประเภทอสังหาฯก่อน', 
+                type: 'warning',
+                duration: 3
+            });
+        }
         // isForRent = Boolean(Number(isForRent));
         // const options = {
         //     typeId: this.state.typeId,
@@ -137,6 +154,18 @@ class PostList extends Component {
         this.updatePosts(this.props.posts, options, false);
     };
 
+    onSortChanged = sortBy => {
+        const { bedRoom, district, minPrice, maxPrice } = this.state;
+        const options = {
+            bedRoom,
+            district,
+            minPrice,
+            maxPrice,
+            sortBy
+        }
+        this.updatePosts(this.props.posts, options);
+    }
+
     sliderTooltipFormatter = value => {
         return value.toLocaleString('en', { maximumSignificantDigits: 3 });
     };
@@ -160,6 +189,42 @@ class PostList extends Component {
 
         if (options.maxPrice) {
             filtered = filtered.filter(post => post.price >= options.minPrice && post.price <= options.maxPrice);
+        }
+
+        if (options.sortBy) {
+            let [ sortBy, asc ] = options.sortBy.split('_');
+            asc = asc === 'asc';
+            console.log(sortBy);
+            console.log(asc);
+            if (sortBy === 'price') {
+                filtered = filtered.sort((a, b) => {
+                    if (a.price < b.price) {
+                        if (asc) return -1; 
+                            else return 1;
+                    }
+                    if (a.price > b.price) {
+                        if (asc) return 1;
+                            else return -1;
+                    }
+                      // a must be equal to b
+                    return 0;
+                });
+            }
+
+            if (sortBy === 'date') {
+                filtered = filtered.sort((a, b) => {
+                    if (a.postId < b.postId) {
+                        if (asc) return -1; 
+                            else return 1;
+                      }
+                      if (a.postId > b.postId) {
+                        if (asc) return 1;
+                            else return -1;
+                      }
+                      // a must be equal to b
+                      return 0;
+                });
+            }
         }
 
         this.setState({ 
@@ -237,6 +302,14 @@ class PostList extends Component {
                         <Option value="2">2 ห้องนอน</Option>
                         <Option value="3">3 ห้องนอน</Option>
                         <Option value="4">4 ห้องนอน</Option>
+                    </Select>
+                    <Select size="large" dropdownMatchSelectWidth={false} placeholder="เรียงตาม" 
+                        onChange={this.onSortChanged}
+                        className="dropdown" style={{minWidth:150}}>
+                        <Option value="price_asc">ราคา น้อย-มาก</Option>
+                        <Option value="price_desc">ราคา มาก-น้อย</Option>
+                        <Option value="date_asc">วันที่ ล่าสุด-เก่า</Option>
+                        <Option value="date_desc">วันที่ เก่า-ล่าสุด</Option>
                     </Select>
                     <Select
                         mode="multiple" size="large"
