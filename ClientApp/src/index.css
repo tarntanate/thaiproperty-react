@@ -29,18 +29,19 @@ div.dropdown {
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
-/* For viewport SM+ */
+/* For viewport smaller than SM */
 @media (max-width: 575px) {
     div.control-zone {
         justify-content: space-between;
         padding: 5px;
-        
+        margin-right: 10px;
+        margin-left: 5px;
         flex-direction: column;
         flex-flow: column;
     }
 }
 
-/* For viewport SM+ */
+/* For viewport larger than SM+ */
 @media (min-width: 576px) {
     div.control-zone {
         /* max-width: 600px; */

@@ -17,8 +17,8 @@ import Post from '../components/PostList/Post';
 const Option = Select.Option;
 const LIMIT_POSTS_FROM_API = 500;
 const LIMIT_POSTS_DISPLAY = 200;
-const PAGESIZE = 20;
-const INFINITE_SCROLL_THRESHOLD = 200;
+const PAGESIZE = 10; // page size for infinite-scroll
+const INFINITE_SCROLL_THRESHOLD = 200; // offset before reach bottom of the page
 const INFINITE_SCROLL_DELAY = 1000;
 
 class PostList extends Component {
@@ -252,7 +252,9 @@ class PostList extends Component {
                         ))}
                     </Select>
                     <Slider
-                        range style={{ width: '100%' }}
+                        range 
+                        style={{ width: '100%' }}
+                        className="slider"
                         disabled={this.state.isLoading}
                         defaultValue={[0, this.state.maxPrice]}
                         step={this.state.sliderStep}

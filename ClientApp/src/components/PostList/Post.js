@@ -6,7 +6,7 @@ import { Icon } from 'react-fa';
 import LazyLoad from 'react-lazyload';
 import { PlaceHolder } from '../Shared/LazyLoadPlaceholder';
 
-const LAZYLOAD_OFFSET = 500;
+const LAZYLOAD_OFFSET = [600,600];
 
 export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent, project, postDate, district, ...props}) => {
     let sellingText = forRent ? 'ให้เช่า' : 'ขาย';
