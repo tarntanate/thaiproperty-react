@@ -218,8 +218,8 @@ class PostList extends Component {
                             else return 1;
                       }
                       if (a.postId > b.postId) {
-                        if (asc) return 1;
-                            else return -1;
+                        if (asc) return -1;
+                            else return 1;
                       }
                       // a must be equal to b
                       return 0;
