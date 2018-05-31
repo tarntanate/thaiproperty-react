@@ -51,8 +51,6 @@ div.control-zone {
 
 div.dropdown {
     margin-bottom: 10px;
-    margin-right: 10px;
-    min-width: 150px;
 }
 
 div.image-gallery {
@@ -98,6 +96,10 @@ div.image-gallery {
         flex-flow: column;
     }
 
+    div.dropdown {
+        margin-bottom: 10px;
+    }
+
     div.image-gallery {
         margin-left: -24px;
         margin-right: -24px;
@@ -119,6 +121,11 @@ div.image-gallery {
     div.control-zone {
         /* max-width: 600px; */
         /* justify-content: space-between; */
+    }
+
+    div.dropdown {
+        margin-right: 10px;
+        min-width: 150px;
     }
 }
 

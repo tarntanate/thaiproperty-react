@@ -42,7 +42,7 @@ class PostList extends Component {
 
     componentDidMount() {
         console.log('PostList container componentDidMount()');
-        this.getData(this.props.match.params);
+        this.fetchData(this.props.match.params);
     }
     
     // Triggers when recieving project list on redux store or changes in redux-router params
@@ -52,7 +52,7 @@ class PostList extends Component {
 
         if (prevParams.categoryName !== categoryName || prevParams.rent !== rent) {
             // there's changes in props.match.params (from redux-router)
-            this.getData(match.params);
+            this.fetchData(match.params);
         }
 
         if (error) {
@@ -74,7 +74,7 @@ class PostList extends Component {
         }
     }
 
-    getData({ categoryName, rent }) {
+    fetchData({ categoryName, rent }) {
         // call redux action creator to get Posts data
         console.log(rent);
         this.props.requestPostList(categoryName, rent, LIMIT_POSTS_FROM_API);
@@ -86,7 +86,6 @@ class PostList extends Component {
     }
 
     onCategoryChange = (categoryName) => {
-        // redirect page
         const isForRent = this.state.isForRent || this.props.match.params.isForRent;
         if (isForRent) {
             this.props.history.push(`/list/${categoryName}/${isForRent}`);
@@ -104,18 +103,9 @@ class PostList extends Component {
             openNotification({ 
                 message: 'ต้องทำการเลือกประเภทอสังหาฯก่อน', 
                 type: 'warning',
-                duration: 3
+                duration: 3,
             });
         }
-        // isForRent = Boolean(Number(isForRent));
-        // const options = {
-        //     typeId: this.state.typeId,
-        //     isForRent,
-        //     bedRoom: this.state.bedRoom,
-        //     district: this.state.district,
-        // }
-        // const posts = this.filteredPosts(this.props.posts, options);
-        // this.setState({ isForRent, posts });
     }
 
     onBedRoomChange = (bedRoom) => {
@@ -125,14 +115,8 @@ class PostList extends Component {
             bedRoom = Number(bedRoom);
         }
 
-        const options = {
-            // typeId: this.state.typeId,
-            // isForRent: this.state.isForRent,
-            bedRoom,
-            district: this.state.district,
-            minPrice: this.state.minPrice,
-            maxPrice: this.state.maxPrice,
-        }
+        const { district, minPrice, maxPrice } = this.state;
+        const options = { bedRoom, district, minPrice, maxPrice };
         this.updatePosts(this.props.posts, options, true);
     }
 
