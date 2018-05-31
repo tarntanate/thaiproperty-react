@@ -85,11 +85,20 @@ div.image-gallery {
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
+.text-primary {
+    color: #1DA57A;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
 /* For viewport smaller than SM */
 @media (max-width: 575px) {
     div.control-zone {
         justify-content: space-between;
         padding: 5px;
+        padding-right: 15px;
         margin-right: 10px;
         margin-left: 5px;
         flex-direction: column;
@@ -98,6 +107,7 @@ div.image-gallery {
 
     div.dropdown {
         margin-bottom: 10px;
+        margin-right: -5px;
     }
 
     div.image-gallery {
@@ -125,7 +135,7 @@ div.image-gallery {
 
     div.dropdown {
         margin-right: 10px;
-        min-width: 150px;
+        min-width: 120px;
     }
 }
 

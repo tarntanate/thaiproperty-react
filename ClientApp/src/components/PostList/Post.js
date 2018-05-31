@@ -21,8 +21,8 @@ export default ({postId, typeId, categoryText = '', thumbnailUrl, title, forRent
         <Card hoverable
             className={altenateCss} 
             bodyStyle={{ padding: 10 }} 
-            style={{ marginBottom: 5, cursor: 'default', borderRadius: '4px'}}>
-            
+            style={{ marginBottom: 5, cursor: 'default', borderRadius: '4px'}}
+            actions={[<Icon name="star-o" />, <Icon name="eye" />, <Icon name="comment-o" />]}>
             <div className="pull-left col-xs-12">
                 <Link to={`/post/${postId}`} title={title}>
                     <LazyLoad width={200} height={150} minHeight={150} offset={LAZYLOAD_OFFSET} debounce={100}

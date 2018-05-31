@@ -13,7 +13,6 @@ import { openNotification } from '../components/Shared/Notification';
 import { ErrorMessage } from '../components/Shared/ErrorMessage';
 import { Loading } from '../components/Shared/Loading';
 import Post from '../components/PostList/Post';
-import Button from 'antd/lib/button';
 
 const Option = Select.Option;
 const LIMIT_POSTS_FROM_API = 500;
@@ -49,22 +48,22 @@ class PostList extends Component {
     UNSAFE_componentWillReceiveProps({ posts, error, match }) {
         const prevParams = this.props.match.params;
         const { categoryName, rent } = match.params;
+        
+        if (error) {
+            openNotification({ message: 'Error loading data', description: error, type: 'error'});
+        }
 
         if (prevParams.categoryName !== categoryName || prevParams.rent !== rent) {
             // there's changes in props.match.params (from redux-router)
             this.fetchData(match.params);
         }
 
-        if (error) {
-            openNotification({ message: 'Error loading data', description: error, type: 'error'});
-        }
-
         if (posts && posts.length > 0) {
+            // Find that maximum price in post list, then set to Slider.
             const priceArr = posts.map(p => {
                 return p.price > 50000000 ? 0 : p.price; // cut the higher price more than 50million off
             });
             const maxPrice = Math.max(...priceArr);
-            console.log(maxPrice);
             this.setState({ 
                 maxPrice,
                 sliderMaxPrice: maxPrice,
@@ -76,10 +75,9 @@ class PostList extends Component {
 
     fetchData({ categoryName, rent }) {
         // call redux action creator to get Posts data
-        console.log(rent);
         this.props.requestPostList(categoryName, rent, LIMIT_POSTS_FROM_API);
         if (rent === 'rent') {
-            this.setState({ sliderMaxPrice: 150000, minPrice:0, maxPrice: 150000, sliderStep: 1000 });
+            this.setState({ sliderMaxPrice: 150000, minPrice:0, maxPrice: 150000, sliderStep: 2000 });
         } else {
             this.setState({ sliderMaxPrice: 25000000, maxPrice: 25000000, sliderStep: 100000 });
         }
@@ -208,7 +206,7 @@ class PostList extends Component {
         });
 
         if (this.infiniteScroll && this.infiniteScroll.pageLoaded) {
-            console.log('reset infinite-scroll pageLoaded to 1 * from', this.infiniteScroll.pageLoaded);
+            // console.log('reset pageLoaded to 1 * from', this.infiniteScroll.pageLoaded);
             this.infiniteScroll.pageLoaded = 1;
         }
         setTimeout(() => this.setState({ isLoading: false }), 200);
@@ -307,7 +305,7 @@ class PostList extends Component {
                         />
                 </div>
                 <div>
-                    แสดงผลการค้นหา {this.state.posts.length} รายการ
+                    แสดงผลการค้นหา <span className="text-primary text-bold">{this.state.posts.length}</span> รายการ
                 </div>
                 {this.state.isLoading && <Loading text="" />}
                 {!this.state.isLoading && 
