@@ -85,13 +85,19 @@ class PostList extends Component {
         }
     }
 
-    onPostTypeChange = (typeId) => {
+    onCategoryChange = (categoryName) => {
         // redirect page
-        this.props.history.push(`/list/${typeId}`);
+        const isForRent = this.state.isForRent || this.props.match.params.isForRent;
+        if (isForRent) {
+            this.props.history.push(`/list/${categoryName}/${isForRent}`);
+        } else {
+            this.props.history.push(`/list/${categoryName}`);
+        }
     }
 
     onForRentChange = (isForRent) => {
         const { categoryName } = this.props.match.params;
+        this.setState({ isForRent });
         if (categoryName) {
             this.props.history.push(`/list/${categoryName}/${isForRent}`);
         } else {
@@ -130,39 +136,23 @@ class PostList extends Component {
         this.updatePosts(this.props.posts, options, true);
     }
 
-    onDistrictChange = (district = []) => {
-        const arrDistrict = district.map(d => Number(d)); // Convert to array of int
-        const options = {
-            // typeId: this.state.typeId,
-            // isForRent: this.state.isForRent,
-            bedRoom: this.state.bedRoom,
-            district: arrDistrict,
-            minPrice: this.state.minPrice,
-            maxPrice: this.state.maxPrice,
-        }
+    onDistrictChange = (districtIds = []) => {
+        const district = districtIds.map(d => Number(d)); // Convert to array of int
+        const { bedRoom, minPrice, maxPrice } = this.state;
+        const options = { bedRoom, minPrice, maxPrice, district };
         this.updatePosts(this.props.posts, options);
     }
 
     onPriceFilterChanged = value => {
-        const minPrice = value[0];
-        const maxPrice = value[1];
-        const options = {
-            minPrice, maxPrice,
-            bedRoom: this.state.bedRoom,
-            district: this.state.district,
-        }
+        const [ minPrice, maxPrice ]  = value;
+        const { bedRoom, district } = this.state;
+        const options = { minPrice, maxPrice, bedRoom, district };
         this.updatePosts(this.props.posts, options, false);
     };
 
     onSortChanged = sortBy => {
         const { bedRoom, district, minPrice, maxPrice } = this.state;
-        const options = {
-            bedRoom,
-            district,
-            minPrice,
-            maxPrice,
-            sortBy
-        }
+        const options = { bedRoom, district, minPrice, maxPrice, sortBy };
         this.updatePosts(this.props.posts, options);
     }
 
@@ -194,8 +184,7 @@ class PostList extends Component {
         if (options.sortBy) {
             let [ sortBy, asc ] = options.sortBy.split('_');
             asc = asc === 'asc';
-            console.log(sortBy);
-            console.log(asc);
+
             if (sortBy === 'price') {
                 filtered = filtered.sort((a, b) => {
                     if (a.price < b.price) {
@@ -239,26 +228,22 @@ class PostList extends Component {
             this.infiniteScroll.pageLoaded = 1;
         }
         setTimeout(() => this.setState({ isLoading: false }), 200);
-        setTimeout(forceCheck, 600); // force lazy-load image to check even no-scrolling
+        setTimeout(forceCheck, 500); // force lazy-load image to check even no-scrolling
     }
 
     loadMore = (pageNum) => {
-        console.log('loadMore() from infinite-scroll');
-        console.log('pageNumber=', pageNum);
+        console.log('loadMore() pageNumber=', pageNum);
 
         --pageNum; // minus 1 for array index.
         let pagedPosts = this.state.posts.slice(pageNum * PAGESIZE, (pageNum + 1) * PAGESIZE);
         console.log('pagedPosts.length =',pagedPosts.length);
         if (pagedPosts.length > 0) {
-            console.log('has more data.. added to pagedPosts array');
+            // has posts in the next page
             setTimeout(() => {
-                console.log('setstate.. pagedPosts');
                 this.setState({ pagedPosts: this.state.pagedPosts.concat(pagedPosts) });
-            },
-            INFINITE_SCROLL_DELAY);
+            }, INFINITE_SCROLL_DELAY);
         } else {
-            // no more infinite-scroll loader
-            console.log('no more infinite-scroll data, disable hasMoreItems.');
+            // no more posts
             this.setState({ hasMoreItems: false });
         }
     }
@@ -275,7 +260,7 @@ class PostList extends Component {
                 )}
                 <div className="control-zone" >
                     <Select size="large" dropdownMatchSelectWidth={false} placeholder="เลือกประเภท"
-                        onChange={this.onPostTypeChange}
+                        onChange={this.onCategoryChange}
                         defaultValue={this.props.match.params.categoryName}
                         className="dropdown">
                         <Option value="condo">คอนโดมิเนียม</Option>
@@ -347,12 +332,12 @@ class PostList extends Component {
                         loadMore={this.loadMore}
                         hasMore={this.state.hasMoreItems}
                         initialLoad={false}
-                        loader={<Loading />}
+                        loader={<Loading key={0} />}
                         threshold={INFINITE_SCROLL_THRESHOLD}
                         useWindow={true}
                         ref={ (infiniteScroll) => { this.infiniteScroll = infiniteScroll; } }
                         >
-                        <div>
+                        <div key={1}>
                         {this.state.pagedPosts.map((p, index) => (
                             <Post
                                 key={p.postId}

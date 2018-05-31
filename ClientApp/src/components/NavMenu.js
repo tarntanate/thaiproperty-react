@@ -29,7 +29,7 @@ export default class NavMenu extends React.Component {
 
     render() {
         return (
-            <Navbar dark className="bg-gradient" fixed="top" expand="sm">
+            <Navbar dark className="bg-dark" fixed="top" expand="sm">
                 <NavbarBrand href="/">Demo React App</NavbarBrand>
                 <NavbarToggler onClick={this.toggleCollapse} />
                 <Collapse isOpen={this.state.isOpen} navbar>

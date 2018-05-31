@@ -34,11 +34,12 @@ button:focus, a:focus {
 }
 
 nav.navbar {
-    max-height: 48px;
+    /* max-height: 48px; */
 }
 
-nav.bg-gradient {
-    background: linear-gradient(to bottom, rgb(26, 83, 117) 0%, rgb(26, 110, 149) 90%);
+nav.bg-dark {
+    /* background: linear-gradient(to bottom, rgb(26, 83, 117) 0%, rgb(26, 110, 149) 90%); */
+    background: linear-gradient(to bottom, rgb(46, 113, 161) 0%, rgb(64, 140, 187) 90%);
 }
 
 div.control-zone {
@@ -139,6 +140,6 @@ div.image-gallery {
     font-weight: bold;
     font-size: 1.4em;
     color: #333366;
-    white-space: wrap;
+    white-space: normal;
     overflow: visible;
 }
