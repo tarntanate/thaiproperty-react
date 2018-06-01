@@ -18,6 +18,7 @@ appsettings.*
 /test.js
 Models/*
 Repositories/*
+Migrations/
 Migrations/*
 ClientApp/README.md
 .vscode
