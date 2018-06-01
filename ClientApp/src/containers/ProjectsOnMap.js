@@ -182,7 +182,7 @@ class ProjectOnMap extends Component {
     }
 
     return (
-      <div style={{ margin: '2px', marginTop: '10px' }}>
+      <div style={{ margin: '2px', marginTop: '15px' }}>
         {this.props.errorMessage && (
           <ErrorMessage text={this.props.errorMessage} />
         )}
@@ -215,7 +215,7 @@ class ProjectOnMap extends Component {
                 <span>
                   แสดงราคาต่อตารางเมตร ระหว่าง {this.state.minAvgPrice.toLocaleString()} ถึง{' '}
                   {this.state.maxAvgPrice.toLocaleString()}
-                  &nbsp;มีทั้งหมด <strong style={{ color: 'darkgreen' }}>{this.state.projectList.length}</strong>{' '}
+                  &nbsp;มีทั้งหมด <strong className="text-primary">{this.state.projectList.length}</strong>{' '}
                   โครงการ
                 </span>
               )}

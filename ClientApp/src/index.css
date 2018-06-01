@@ -35,11 +35,20 @@ button:focus, a:focus {
 
 nav.navbar {
     /* max-height: 48px; */
+    box-shadow: 0 2px 8px 2px #b0b0b0;
 }
 
 nav.bg-dark {
     /* background: linear-gradient(to bottom, rgb(26, 83, 117) 0%, rgb(26, 110, 149) 90%); */
     background: linear-gradient(to bottom, rgb(46, 113, 161) 0%, rgb(64, 140, 187) 90%);
+}
+
+div.container {
+    padding-top: 10px;
+}
+
+div.list-container {
+    /* background-color: #eaeaea; */
 }
 
 div.control-zone {

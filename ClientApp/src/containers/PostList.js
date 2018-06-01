@@ -259,7 +259,7 @@ class PostList extends Component {
         }
 
         return (
-            <div>
+            <div className="mt-3">
                 {this.props.errorMessage && (
                     <ErrorMessage text={this.props.errorMessage} />
                 )}
@@ -344,7 +344,7 @@ class PostList extends Component {
                         useWindow={true}
                         ref={ (infiniteScroll) => { this.infiniteScroll = infiniteScroll; } }
                         >
-                        <div key={1}>
+                        <div key={1} className="list-container">
                         {this.state.pagedPosts.map((p, index) => (
                             <Post
                                 key={p.postId}
