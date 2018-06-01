@@ -255,7 +255,7 @@ class PostList extends Component {
 
     render() {
         if (this.props.isLoading) {
-            return <Loading text="กำลังโหลดข้อมูล" />;
+            return <Loading text="กำลังโหลดข้อมูล" className="m-5" />;
         }
 
         return (

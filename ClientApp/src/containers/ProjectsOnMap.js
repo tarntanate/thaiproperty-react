@@ -210,7 +210,7 @@ class ProjectOnMap extends Component {
               tipFormatter={this.sliderTooltipFormatter}
               onChange={this.onPriceFilterChanged}
             />
-            <div>
+            <div style={{minHeight:25, lineHeight: '1.5em'}}>
               {this.state.minAvgPrice !== null && (
                 <span>
                   แสดงราคาต่อตารางเมตร ระหว่าง {this.state.minAvgPrice.toLocaleString()} ถึง{' '}
@@ -221,7 +221,10 @@ class ProjectOnMap extends Component {
               )}
               {this.state.isLoading && (
                 <span style={{ fontStyle: 'italic' }}>
-                  <Spinner size="small" style={{ marginLeft: '10px', marginRight: '10px' }} />กำลังอัพเดตแผนที่...
+                  <Spinner size="small" style={{ 
+                        marginLeft: '10px', marginRight: '10px',
+                        padding:0, marginBottom:0, marginTop:0
+                    }} />กำลังอัพเดตแผนที่...
                 </span>
               )}
             </div>
