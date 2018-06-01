@@ -43,7 +43,7 @@ export const actionCreators = {
         default:
             break;
     }
-    console.log('fetching categoryType=',categoryType);
+    console.debug('redux-action categoryType=',categoryType);
     let apiUrl = `${getApiServerUrl()}/posts/?typeId=${typeId}`;
     if (rent === 'rent') {
         apiUrl += `&forRent=true`;

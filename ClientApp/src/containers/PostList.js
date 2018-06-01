@@ -29,10 +29,10 @@ class PostList extends Component {
         isForRent: null,
         bedRoom: null,
         district: [], // array of districtId
-        minPrice: 0,
+        minPrice: sessionStorage.getItem('options_slider_minprice') || 0,
         maxPrice: null,
         sliderMaxPrice: null,
-        sliderStep: 1000,
+        sliderStep: 2000,
         searchText: '',
         isLoading: false,  // this is local loading from search filter or sliding price limit
         hasMoreItems: true, // for infinite-scroll
@@ -40,7 +40,7 @@ class PostList extends Component {
     };
 
     componentDidMount() {
-        console.log('PostList container componentDidMount()');
+        console.debug('PostList container componentDidMount()');
         this.fetchData(this.props.match.params);
     }
     
@@ -63,18 +63,33 @@ class PostList extends Component {
             const priceArr = posts.map(p => {
                 return p.price > 50000000 ? 0 : p.price; // cut the higher price more than 50million off
             });
-            const maxPrice = Math.max(...priceArr);
+            let maxPrice = Math.max(...priceArr);
             this.setState({ 
                 maxPrice,
                 sliderMaxPrice: maxPrice,
-                posts : posts.slice(0, LIMIT_POSTS_DISPLAY),
+                posts :  posts, //posts.slice(0, LIMIT_POSTS_DISPLAY),
                 pagedPosts : posts.slice(0, PAGESIZE),
             });
+
+            // Get options value from sessionStorage
+            // sessionStorage always store data as String, so we have to explicitly convert to Number
+            
+            let _bedroom = sessionStorage.getItem('options_select_bedroom');
+            const bedRoom = _bedroom != null ? Number(_bedroom) : null; // Convert value from String to Number, or null
+            const savedMinPrice = sessionStorage.getItem('options_slider_minprice') || 0;
+            const savedMaxPrice = sessionStorage.getItem('options_slider_maxprice') || maxPrice;
+            console.log('savedMaxPrice=', savedMaxPrice);
+            const options = { 
+                bedRoom,
+                minPrice : Number(savedMinPrice),
+                maxPrice: Number(savedMaxPrice),
+            };
+            this.updatePosts(posts, options, false);
         }
     }
 
     fetchData({ categoryName, rent }) {
-        // call redux action creator to get Posts data
+        // call redux action creator to get Posts data, then the posts data will receive via props (componentWillReceiveProps)
         this.props.requestPostList(categoryName, rent, LIMIT_POSTS_FROM_API);
         if (rent === 'rent') {
             this.setState({ sliderMaxPrice: 150000, minPrice:0, maxPrice: 150000, sliderStep: 2000 });
@@ -93,24 +108,29 @@ class PostList extends Component {
     }
 
     onForRentChange = (isForRent) => {
+        // User must select category before select isForRent
         const { categoryName } = this.props.match.params;
-        this.setState({ isForRent });
         if (categoryName) {
+            this.setState({ isForRent });
+            sessionStorage.removeItem('options_slider_minprice');
+            sessionStorage.removeItem('options_slider_maxprice');
             this.props.history.push(`/list/${categoryName}/${isForRent}`);
         } else {
             openNotification({ 
                 message: 'ต้องทำการเลือกประเภทอสังหาฯก่อน', 
-                type: 'warning',
+                type: 'error',
                 duration: 3,
             });
         }
     }
 
     onBedRoomChange = (bedRoom) => {
-        if (!bedRoom) { 
-            bedRoom = null;
-        } else {
+        if (bedRoom != null) { 
             bedRoom = Number(bedRoom);
+            sessionStorage.setItem('options_select_bedroom', bedRoom);
+        } else {
+            bedRoom = null;
+            sessionStorage.removeItem('options_select_bedroom');
         }
 
         const { district, minPrice, maxPrice } = this.state;
@@ -130,6 +150,8 @@ class PostList extends Component {
         const { bedRoom, district } = this.state;
         const options = { minPrice, maxPrice, bedRoom, district };
         this.updatePosts(this.props.posts, options, false);
+        sessionStorage.setItem('options_slider_minprice', minPrice);
+        sessionStorage.setItem('options_slider_maxprice', maxPrice);
     };
 
     onSortChanged = sortBy => {
@@ -142,8 +164,9 @@ class PostList extends Component {
         return value.toLocaleString('en', { maximumSignificantDigits: 3 });
     };
 
-    // update this.state.posts[] to filtered from this.props.posts[]
+    // update this.state.posts to filtered with user select options from this.props.posts (redux) data
     updatePosts = (posts = [], options = {}, showLoader = true) => {
+        // console.debug(options);
         if (showLoader) {
             this.setState({ isLoading: true });
         };
@@ -205,6 +228,7 @@ class PostList extends Component {
             ...options
         });
 
+        // Reset infinite-scroll paging
         if (this.infiniteScroll && this.infiniteScroll.pageLoaded) {
             // console.log('reset pageLoaded to 1 * from', this.infiniteScroll.pageLoaded);
             this.infiniteScroll.pageLoaded = 1;
@@ -214,11 +238,10 @@ class PostList extends Component {
     }
 
     loadMore = (pageNum) => {
-        console.log('loadMore() pageNumber=', pageNum);
-
+        // console.debug('loadMore() pageNumber=', pageNum);
         --pageNum; // minus 1 for array index.
         let pagedPosts = this.state.posts.slice(pageNum * PAGESIZE, (pageNum + 1) * PAGESIZE);
-        console.log('pagedPosts.length =',pagedPosts.length);
+        console.debug('pagedPosts.length =',pagedPosts.length);
         if (pagedPosts.length > 0) {
             // has posts in the next page
             setTimeout(() => {
@@ -254,21 +277,23 @@ class PostList extends Component {
                         <Option value="apartment">อพาร์ทเมนท์</Option>
                     </Select>
                     <Select size="large" dropdownMatchSelectWidth={false} placeholder="ขาย/ให้เช่า" 
-                        onChange={this.onForRentChange}
-                        defaultValue={this.props.match.params.rent}
-                        className="dropdown">
+                            onChange={this.onForRentChange}
+                            defaultValue={this.props.match.params.rent}
+                            value={this.state.isForRent === null ? this.props.match.params.rent : this.state.isForRent}
+                            className="dropdown">
                         <Option value="sale">ขาย</Option>
                         <Option value="rent">ให้เช่า</Option>
                     </Select>
                     <Select size="large" dropdownMatchSelectWidth={false} placeholder="จำนวนห้องนอน" 
                         onChange={this.onBedRoomChange}
+                        defaultValue={this.state.bedRoom}
                         className="dropdown" style={{minWidth:150}}>
-                        <Option value="">ไม่ระบุ</Option>
-                        <Option value="0">ห้องสตูดิโอ</Option>
-                        <Option value="1">1 ห้องนอน</Option>
-                        <Option value="2">2 ห้องนอน</Option>
-                        <Option value="3">3 ห้องนอน</Option>
-                        <Option value="4">4 ห้องนอน</Option>
+                        <Option value={null}>ทุกแบบห้อง</Option>
+                        <Option value={0}>ห้องสตูดิโอ</Option>
+                        <Option value={1}>1 ห้องนอน</Option>
+                        <Option value={2}>2 ห้องนอน</Option>
+                        <Option value={3}>3 ห้องนอน</Option>
+                        <Option value={4}>4 ห้องนอน</Option>
                     </Select>
                     <Select size="large" dropdownMatchSelectWidth={false} placeholder="เรียงตาม" 
                         onChange={this.onSortChanged}
@@ -296,7 +321,7 @@ class PostList extends Component {
                         style={{ width: '100%' }}
                         className="slider"
                         disabled={this.state.isLoading}
-                        defaultValue={[0, this.state.maxPrice]}
+                        defaultValue={[this.state.minPrice, this.state.maxPrice]}
                         step={this.state.sliderStep}
                         max={this.state.sliderMaxPrice}
                         value={[this.state.minPrice, this.state.maxPrice]}

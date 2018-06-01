@@ -13,14 +13,13 @@ class PostDetail extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.match.params);
         this.getPostData(this.props.match.params.id);
     }
     
     getPostData = async postId => {
         try {
             const apiUrl = `${getApiServerUrl()}/posts/${postId}`;
-            console.log(apiUrl);
+            console.log('fetching:', apiUrl);
             const response = await fetch(apiUrl);
             const post = await response.json();
             let error = null;
@@ -45,9 +44,9 @@ class PostDetail extends Component {
         const post = this.state.post;
         if (this.state.isLoading) {
             return (
-                <React.Fragment>
+                <div className="m-5">
                     <Loading text="loading..." />    
-                </React.Fragment>
+                </div>
             )
         }
 
@@ -56,18 +55,14 @@ class PostDetail extends Component {
             original: imageHost + img.imageFileName,
             thumbnail: `${imageHost}${img.imageFileName}&size=150x150`,
         }));
-
         const logoImage = [{
                 original: imageHost + post.logoImageFile,
                 thumbnail : `${imageHost}${post.logoImageFile}&size=150x150`,
             }];
-
         const images = [...logoImage, ...propImages];
 
-        console.log(images);
-
         return (
-            <div>
+            <div className="mt-3">
                 <Card title={post.title}>
                     <ImageGallery 
                         items={images} 
