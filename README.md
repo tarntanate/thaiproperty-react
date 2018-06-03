@@ -1,22 +1,25 @@
-## FOR TESTING AND DEMO OF REACT + .NET CORE ONLY!!
+### FOR TESTING AND DEMO OF REACT + .NET CORE ONLY!!
+#### This repo is not including all of source code, (NOT INCLUDED MODELS, REPOSITORES AND ANY DATABASE RELATED)
+#### So, you cannot clone and just run it, it will throw an errors!!
 
 ### THIS REPO DOES NOT ALLOW TO REPRODUCE AND PLEASE USE WITH CONFIDENTIALLY!!
 
 ### This application demonstrate of listing condominium projects on a Google Map (as Marker & MarkerClusterer). User allow to filter the price based on average price/sqm. via slider or filter by project name with a "**real-time**" re-rendering on a map.
 
-### Data sources were sampled from www.thaiproperty.in.th (dev DB not production DB)
+### Data sources were sampled from www.thaiproperty.in.th (development DB not production DB)
 
 ---
 
-### See a real demo app at http://react.thaiproperty.in.th/
+### Real demo at http://react.thaiproperty.in.th/projects/map
 
-### See a raw json response from API at http://react.thaiproperty.in.th/api/projects/withAvgPrice
+### Source data (json) from API at http://react.thaiproperty.in.th/api/projects/withAvgPrice
 
 ---
 
 ### What you should look into this repo?
 
-* 'React App' in '/ClientApp/src/' folder
+* 'React App' in '/ClientApp/src/' folder,
+* '
 * 'Testing for React App' in '/ClientApp/src/tests/' folder
 * 'Backend Api Controller as C#.NET' in '/Controllers/' folder
 
@@ -54,11 +57,3 @@ OR run server and client seperately by
 ### For client-side (React) testing
 
 Go into 'ClientApp' folder and run '**npm test**'.
-
----
-
-## How to deploy to production server.
-
-To deploy with windows IIS
-
-* Run "dotnet publish --configuration Release --runtime win10-x64 --verbosity normal"
