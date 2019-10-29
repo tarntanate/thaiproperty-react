@@ -12,7 +12,7 @@
 
 ### Real demo at https://www.thaiproperty.in.th/projects/map
 
-### Source data (json) from API at https://www.thaiproperty.in.th/api/projects/withAvgPrice
+### Source data (json) from API at https://api.thaiproperty.in.th/api/projects/withAvgPrice
 
 ---
 
