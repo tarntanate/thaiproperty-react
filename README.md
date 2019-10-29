@@ -10,9 +10,9 @@
 
 ---
 
-### Real demo at http://react.thaiproperty.in.th/projects/map
+### Real demo at https://www.thaiproperty.in.th/projects/map
 
-### Source data (json) from API at http://react.thaiproperty.in.th/api/projects/withAvgPrice
+### Source data (json) from API at https://www.thaiproperty.in.th/api/projects/withAvgPrice
 
 ---
 
@@ -28,8 +28,6 @@
 ### API Url configuration location
 
 In development: http://localhost:5000/api/
-
-In production: http://react.thaiproperty.in.th/api
 
 or via https with port 5001
 
