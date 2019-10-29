@@ -6,11 +6,11 @@
 
 ### This application demonstrate of listing condominium projects on a Google Map (as Marker & MarkerClusterer). User allow to filter the price based on average price/sqm. via slider or filter by project name with a "**real-time**" re-rendering on a map.
 
-### Data sources were sampled from www.thaiproperty.in.th (development DB not production DB)
+### Data sources were sampled from www.thaiproperty.in.th
 
 ---
 
-### Real demo at https://www.thaiproperty.in.th/projects/map
+### Real demo at https://www.thaiproperty.in.th/project/map
 
 ### Source data (json) from API at https://api.thaiproperty.in.th/api/projects/withAvgPrice
 
